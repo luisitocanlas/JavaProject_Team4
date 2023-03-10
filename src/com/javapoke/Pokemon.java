@@ -2,7 +2,7 @@ package com.javapoke;
 
 import java.util.HashMap;
 
-class Pokemon {
+public class Pokemon {
     // fields
     String name;
     int level;
