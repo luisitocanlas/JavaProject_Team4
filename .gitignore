@@ -1,0 +1,13 @@
+# IntelliJ metadata files
+.idea/*
+!.idea/artifacts/
+!.idea/libraries/
+!.idea/modules.xml
+!.idea/misc.xml
+!.idea/*.iml
+
+# build output
+/out/
+
+# macOS
+.DS_Store
