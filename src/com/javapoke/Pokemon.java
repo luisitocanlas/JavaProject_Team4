@@ -10,6 +10,12 @@ public class Pokemon {
     boolean isFainted = false;
     HashMap<String, Double> attack;
 
+    public Pokemon(String name, int level, int hitPoints){
+        this.name = name;
+        this.level = level;
+        this.hitPoints = hitPoints;
+    }
+
     // constructors
     public Pokemon(String name, int level, int hitPoints, HashMap<String, Double> attack) {
         this.name = name;

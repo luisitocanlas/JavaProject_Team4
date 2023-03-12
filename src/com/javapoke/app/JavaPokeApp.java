@@ -3,12 +3,15 @@ package com.javapoke.app;
 import com.javapoke.Pokemon;
 import com.javapoke.Trainer;
 
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 public class JavaPokeApp {
     private static final int maxLength = 12;
+    private static final String pokemonData = "data/Pokemon Chart.csv";
+    private final Map<Integer,Pokemon> pokemonMap = loadPokemonMap();
 
     private Trainer trainer;
     private final Scanner scanner = new Scanner(System.in);
@@ -59,20 +62,21 @@ public class JavaPokeApp {
                 "will consume your turn and are open to be attacked");
         System.out.println("2. In your items bag you will have a fixed amount of "
                 + "Potions and Super Potions. Use Wisely.");
-        System.out.println("3. ");
+        System.out.println("3. Your items will not regenerate after a battle is completed");
+        System.out.println("4. If all your pokemon have fainted. You lose!!!");
     }
 
     /*
      * This method will produce a GAME OVER message to the user if called.
      */
     private void gameOver() {
-        console.clear();
-        System.out.println("G A M E  O V E R!!!!");
-        System.out.println("T H A N K  Y O U  F O R  P L A Y I N G!!!");
+//        console.clear();
+        System.out.println("G A M E  O V E R  ! ! ! !");
+        System.out.println("T H A N K  Y O U  F O R  P L A Y I N G  !");
     }
 
     private void startGame() {
-        console.clear();
+//        console.clear();
     }
 
     /*
@@ -81,19 +85,48 @@ public class JavaPokeApp {
      * the same Pokémon on the list.
      */
     private void choosePokemon() {
-        console.clear();
+//        console.clear();
         boolean validInput = false;
 
         while (!validInput) {
             System.out.println("You may choose 4 pokemon to join you in your journey");
+            System.out.println("Select your 1st pokemon : ");
             // Here we will display the Map<Integer,Pokemon>    1-10   |   Pokemon Obj
-            Map<Integer, Pokemon> pokemonMap = new TreeMap<>();
+            loadPokemonMap();
+
 
         }
     }
 
+    private Map<Integer, Pokemon> loadPokemonMap () {
+        Map<Integer, Pokemon> pokemonMap = new HashMap<>();
+
+        try {
+            List<String> lines = Files.readAllLines(Path.of("data/Pokemon Chart.csv"));
+
+            for (String line : lines) {
+                String[] tokens = line.split(",");
+                if (tokens.length >= 4) {
+                    pokemonMap.put(Integer.valueOf(tokens[0]),
+                            new Pokemon(tokens[1],Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pokemonMap;
+    }
+
+    private static Pokemon getPokemon(String line) {
+        String[] tokens = line.split(",");
+        if (tokens.length != 3) {
+            throw new RuntimeException("Invalid Line in CSV file " + line);
+        }
+        return new Pokemon(tokens[1],Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
+    }
+
     private void chooseTrainer() {
-        console.clear();
+//        console.clear();
         boolean validInput = false;
 
         while (!validInput) {
@@ -116,7 +149,7 @@ public class JavaPokeApp {
     }
 
     private void trainerCollection() {
-        console.clear();
+//        console.clear();
 
         boolean validInput = false;
 
@@ -127,7 +160,7 @@ public class JavaPokeApp {
     }
 
     private void characterCreation() {
-        console.clear();
+//        console.clear();
 
         boolean validInput = false;
 
@@ -141,5 +174,9 @@ public class JavaPokeApp {
                 System.out.printf("Name must not exceed %s characters", maxLength);
             }
         }
+    }
+
+    public void dumpPokemonMap() {
+        System.out.println(pokemonMap);
     }
 }
