@@ -1,5 +1,6 @@
 package com.javapoke;
 
+import com.javapoke.app.JavaPokeApp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +39,11 @@ public class PokeBattleTest {
         List<Pokemon> pokeBelt = new ArrayList<>(List.of(charmander, squirtle));
 
         ash = new Trainer("Ash", pokeBelt, myPotions);
+    }
+
+    @Test
+    public void trainer_Chooses_Pokemon_fromCSV() {
+        // might have to test this when running Main
     }
 
     @Test
