@@ -2,16 +2,18 @@ package com.javapoke.app;
 
 import com.javapoke.Pokemon;
 import com.javapoke.Trainer;
+import com.apps.util.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class JavaPokeApp {
+public class JavaPokeApp implements SplashApp{
     private static final int maxLength = 12;
     private static final String pokemonData = "data/Pokemon Chart.csv";
     private final Map<Integer,Pokemon> pokemonMap = loadPokemonMap();
+    private final Prompter prompter = new Prompter(new Scanner(System.in));
 
     private Trainer trainer;
     private final Scanner scanner = new Scanner(System.in);
@@ -21,10 +23,15 @@ public class JavaPokeApp {
      */
     public void beginChallenge() {
         welcome();
-        chooseTrainer();
-        choosePokemon();
-        startGame();
+        //chooseTrainer();
+        //choosePokemon();
+        //startGame();
         gameOver();
+    }
+
+    private void welcomeMessage() {
+        System.out.println("W E L C O M E  T O  J A V A  P O K E!!!!");
+        start();
     }
 
     /*
@@ -34,22 +41,10 @@ public class JavaPokeApp {
      * and continue to chooseTrainer() in beginChallenge()
      */
     private void welcome() {
-        boolean validInput = false;
+        welcomeMessage();
 
-        while (!validInput) {
-            System.out.println("W E L C O M E  T O  J A V A  P O K E!!!!");
-            System.out.print("Would you like to see the rules before starting our game? " +
-                    "Enter [Y]es or [N]o : ");
-            String ruleInput = scanner.nextLine().trim().toUpperCase();
-            if (ruleInput.matches("Y|N")) {
-                validInput = true;
-                if ("Y".equals(ruleInput)) {
-                    rules();
-                } else {
-                    break;
-                }
-            }
-        }
+        prompter.prompt("Would you like to see the rules before starting our game? " +
+                "Enter [Y]es or [N]o : ", "Y|N|y|n", "\nThis is not a valid option!\n");
     }
 
     /*
@@ -92,6 +87,7 @@ public class JavaPokeApp {
             System.out.println("You may choose 4 pokemon to join you in your journey");
             System.out.println("Select your 1st pokemon : ");
             // Here we will display the Map<Integer,Pokemon>    1-10   |   Pokemon Obj
+
             loadPokemonMap();
 
 
@@ -181,5 +177,10 @@ public class JavaPokeApp {
 
     public void dumpPokemonMap() {
         System.out.println(pokemonMap);
+    }
+
+    @Override
+    public void start() {
+
     }
 }
