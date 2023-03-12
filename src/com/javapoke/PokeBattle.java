@@ -1,5 +1,7 @@
 package com.javapoke;
 
+import java.util.Map;
+
 public class PokeBattle {
     boolean inBattle = false;    // will be a check when switching pokemon
 
@@ -18,6 +20,11 @@ public class PokeBattle {
      * other methods will be done for the future update.
      */
     // methods
+    public Map<Integer, Pokemon> loadPokemon() {
+
+        return null;
+    }
+
     public void startPokeBattle() {
         // pick a pokemon from your list, maybe use switchPokemon method here
         // show options: fight, items, switch
@@ -30,6 +37,8 @@ public class PokeBattle {
 
     public void useItem() {
         // will look through the list of potions to use
+
+
         // computer attacks your pokemon
     }
 
