@@ -8,7 +8,8 @@ public class Pokemon {
     int level;
     int hitPoints;
     boolean isFainted = false;
-    HashMap<String, Double> attack;
+    HashMap<String, Double> attack;     // [ attackName : attack damage ], might have to change this to just a name
+                                        // attack damage will be handled by a number randomizer
 
     public Pokemon(String name, int level, int hitPoints){
         this.name = name;
