@@ -66,6 +66,7 @@ public class Pokemon {
                 ", level=" + level +
                 ", hitPoints=" + hitPoints +
                 ", isFainted=" + isFainted +
+                ", attack=" + attack +
                 '}';
     }
 }
