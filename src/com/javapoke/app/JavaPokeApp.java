@@ -102,13 +102,16 @@ public class JavaPokeApp {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
 
         try {
-            List<String> lines = Files.readAllLines(Path.of("data/Pokemon Chart.csv"));
+            List<String> lines = Files.readAllLines(Path.of(pokemonData));
 
             for (String line : lines) {
                 String[] tokens = line.split(",");
-                if (tokens.length >= 4) {
+                if (tokens.length == 4) {
                     pokemonMap.put(Integer.valueOf(tokens[0]),
                             new Pokemon(tokens[1],Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])));
+                }
+                else {
+                    throw new RuntimeException("Invalid Line in CSV file " + line);
                 }
             }
         } catch (IOException e) {
