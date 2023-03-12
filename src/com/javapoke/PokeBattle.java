@@ -8,6 +8,9 @@ public class PokeBattle {
     List<Pokemon> pokeStorage;      // will contain the pokemon selected by the user by the choosePokemon()
     List<Potion> myPotions;         // will contain predetermined potion types and quantity
 
+    // TODO: implement something that tells you which is the current active pokemon
+    Pokemon activePokemon;             // container for the active pokemon for the current battle
+
     // TODO: implement the option to choose from a list of names or type in their own name
     Trainer user = new Trainer("Ash");
     Trainer elite1 = new Trainer("Lorelei");
@@ -15,7 +18,6 @@ public class PokeBattle {
     Trainer elite3 = new Trainer("Agatha");
     Trainer elite4 = new Trainer("Lance");
     Trainer surprise = new Trainer("THE Joshua BLOCH");
-
 
     /*
      * These methods are only for the user. The computer will only use fight(), implementation of the
@@ -39,15 +41,22 @@ public class PokeBattle {
         // computer attacks your pokemon
     }
 
+    public void setActivePokemon() {
+        // this will be set to the first pokemon selected by the user (by default) when choosing their pokemon
+        // will work the switchPokemon() method
+    }
+
     public void switchPokemon() {
         // if in a battle [inBattle = true]
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
             // cannot select pokemon with isFainted=true
+            // call setActivePokeman() method
             // computer attacks your pokemon
 
         // else if you are in between fights [inBattle=false]
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
             // cannot select pokemon with isFainted=true
+            // call setActivePokeman() method
             // go to the next battle
             // switch [inBattle=true]
     }
