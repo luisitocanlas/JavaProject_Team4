@@ -75,13 +75,18 @@ public class JavaPokeApp {
         console.clear();
     }
 
+    /*
+     * This method will allow the user to choose from a Map of Pokémon and depending on their input
+     * will add the Pokémon to their arsenal. Will need to make sure that the player may not choose
+     * the same Pokémon on the list.
+     */
     private void choosePokemon() {
         console.clear();
         boolean validInput = false;
 
         while (!validInput) {
             System.out.println("You may choose 4 pokemon to join you in your journey");
-            // Here we will display the Map<Integer,Pokemon>    1-8   |   Pokemon Obj
+            // Here we will display the Map<Integer,Pokemon>    1-10   |   Pokemon Obj
             Map<Integer, Pokemon> pokemonMap = new TreeMap<>();
 
         }
