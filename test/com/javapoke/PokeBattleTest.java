@@ -1,23 +1,37 @@
 package com.javapoke;
 
+import com.apps.util.Console;
+import com.apps.util.Prompter;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.javapoke.Potion.*;
 
 public class PokeBattleTest {
     // fixture
+    private Prompter prompter;
     Trainer trainer;
+    Trainer elite1;
+    Trainer elite2;
+    Trainer elite3;
+    Trainer elite4;
+    Trainer surprise;
     Pokemon activePokemon;
+    Pokemon charmander;
+    Pokemon squirtle;
+    Pokemon bulbasaur;
+    Pokemon lapras;
+    Pokemon machamp;
+    Pokemon gengar;
+    Pokemon dragonite;
+    Pokemon mewtwo;
+    Map<Integer, Pokemon> pokeBelt;
+    Map<Integer, Pokemon> pokeBelt2;
     List<Trainer> opponents;
     Trainer activeOpponent;
-    List<Pokemon> pokeBelt;
-    List<Pokemon> pokeBelt2;
 
     // potion counter
     int potion = 10;
@@ -27,67 +41,119 @@ public class PokeBattleTest {
 
     @Before
     public void setUp() {
+         prompter = new Prompter(new Scanner(System.in));
+
         // TODO: figure out how to do this when getting the data from the csv.file and user prompts
         // create pokemon and add the attacks
-        Pokemon charmander = new Pokemon("Charmander", 62, 165, "Ember");
-        Pokemon squirtle = new Pokemon("Squirtle", 60, 145, "Water ball");
-        Pokemon lapras = new Pokemon("Lapras", 60, 130, "Blizzard");
-        Pokemon machamp = new Pokemon("Machamp", 60, 90, "Body Slam");
-        Pokemon gengar = new Pokemon("Gengar", 60, 60, "Night Shade");
-        Pokemon dragonite = new Pokemon("Dragonite", 60, 91, "Hyper Beam");
-        Pokemon mewtwo = new Pokemon("Mewtwo", 60, 106, "Psychic");
+        charmander = new Pokemon("Charmander", 62, 165, "Ember");
+        squirtle = new Pokemon("Squirtle", 60, 145, "Water ball");
+        bulbasaur = new Pokemon("Bulbasaur", 61, 155, "Vine Whip");
+        lapras = new Pokemon("Lapras", 60, 130, "Blizzard");
+        machamp = new Pokemon("Machamp", 60, 90, "Body Slam");
+        gengar = new Pokemon("Gengar", 60, 60, "Night Shade");
+        dragonite = new Pokemon("Dragonite", 60, 91, "Hyper Beam");
+        mewtwo = new Pokemon("Mewtwo", 60, 106, "Psychic");
 
         // TODO: figure out how to do this when getting the data from the csv.file and user prompts
         // create a pokemon storage that the trainer carries
-        pokeBelt = new ArrayList<>(List.of(charmander, squirtle));
-        pokeBelt2 = new ArrayList<>(List.of(squirtle, charmander));
+        pokeBelt = Map.of(1,charmander, 2,squirtle, 3,bulbasaur);
+        pokeBelt2 = Map.of(1,squirtle, 2,charmander, 3,bulbasaur);
 
         // TODO: implement the option to choose from a list of names or type in their own name
-        Trainer trainer = new Trainer("Ash", pokeBelt);              // will be replaced by the chooserTrainer()
-        Trainer elite1 = new Trainer("Lorelei", new ArrayList<>(List.of(lapras)));
-        Trainer elite2 = new Trainer("Bruno", new ArrayList<>(List.of(machamp)));
-        Trainer elite3 = new Trainer("Agatha", new ArrayList<>(List.of(gengar)));
-        Trainer elite4 = new Trainer("Lance", new ArrayList<>(List.of(dragonite)));
-        Trainer surprise = new Trainer("THE Joshua BLOCH", new ArrayList<>(List.of(mewtwo)));
+        trainer = new Trainer("Ash", pokeBelt);              // will be replaced by the chooserTrainer()
+        elite1 = new Trainer("Lorelei", Map.of(1, lapras));
+        elite2 = new Trainer("Bruno", Map.of(1,machamp));
+        elite3 = new Trainer("Agatha", Map.of(1,gengar));
+        elite4 = new Trainer("Lance", Map.of(1,dragonite));
+        surprise = new Trainer("THE Joshua BLOCH", Map.of(1,mewtwo));
 
         // TODO: implement something that tells you which is the current active pokemon
         // container for the active pokemon for the current battle
-        activePokemon = trainer.getPokemon().get(0);
+        activePokemon = trainer.getPokemon().get(1);
 
         // list of opponents to go through
         opponents = new ArrayList<>(List.of(elite1, elite2, elite3, elite4, surprise));
 
-        // container for active opponent
+        // container for active opponent, maybe change this to the opponent's pokemon instead of the trainer
         activeOpponent = elite1;
     }
 
     @Test
+    public void fight_attackAndReceiveDamage() {
+        // show activePokemon
+        System.out.println(activePokemon);
+        // show activeOpponent's pokemon
+        System.out.println(activeOpponent.getPokemon().get(1));
+        System.out.println();
+
+        // player attacks
+        int damage = attackDamage();
+        System.out.printf("%s uses %s\n", activePokemon.getName(), activePokemon.getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", damage,
+                activeOpponent.getPokemon().get(1).getName());
+        activeOpponent.getPokemon().get(1).setHitPoints(activeOpponent.getPokemon().get(1).getHitPoints()
+                - damage);
+        System.out.println(activeOpponent.getPokemon().get(1));
+        System.out.println();
+
+        // opponent attacks
+        int damage2 = attackDamage();
+        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(),
+                activeOpponent.getPokemon().get(1).getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", damage2, activePokemon.getName());
+        activePokemon.setHitPoints(activePokemon.getHitPoints() - damage2);
+        System.out.println(activePokemon);
+        System.out.println();
+
+        //end of turn
+    }
+
+    private int attackDamage() {
+        int pain = 0;
+        Random random = new Random();
+        pain = random.nextInt(30) + 1;      // damage will be between 1~30, attack modifier will be for future code
+        return pain;
+    }
+
+    @Test
     public void switchingPokemon() {
-        inBattle = false;
+        inBattle = true;
+        bulbasaur.setFainted(true);
 
         if (!inBattle) {
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
-            for (Pokemon pokemon : pokeBelt) {
-                System.out.println(pokemon);
-            }
-            // cannot select pokemon with isFainted=true
-            // set activePokeman
+            pokeSwitch();
             // computer attacks your pokemon
         }
-
         // else if you are in between fights [inBattle=false]
-        else {
+        else if (inBattle) {
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
-            for (Pokemon pokemon : pokeBelt2) {
-                System.out.println(pokemon);
-            }
-            // cannot select pokemon with isFainted=true
-            // set activePokeman
+            pokeSwitch();
             // go to the next battle
             // switch [inBattle=true]
             inBattle = true;
         }
-        System.out.println(inBattle);
+//        System.out.println(inBattle);
+    }
+
+    private void pokeSwitch() {
+        System.out.println(" Option \tPokemon \tLevel \tHP");
+        System.out.println(" ====== \t======= \t===== \t===");
+        for (Map.Entry<Integer, Pokemon> pokemon : pokeBelt.entrySet()) {
+            System.out.printf("   %s: \t\t%s \t %s \t%s\n"
+                    , pokemon.getKey(), pokemon.getValue().getName()
+                    , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints());
+        }
+        String pokemonPrompt = "3";
+//        String pokemonPrompt = prompter.prompt("Select pokemon #", "1|2|3|4", "\nThis is not a valid option!\n");
+        if (trainer.getPokemon().get(Integer.parseInt(pokemonPrompt)).isFainted() ||
+                trainer.getPokemon().get(Integer.parseInt(pokemonPrompt)).getHitPoints() <= 0) {
+            System.out.println("Cannot select pokemon");
+        }
+        else {
+            activePokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
+            System.out.printf("%s is selected.", activePokemon.getName());
+        }
     }
 
     @Test
@@ -96,6 +162,29 @@ public class PokeBattleTest {
         Random random = new Random();
         pain = random.nextInt(30) + 1;
         System.out.println(pain);
+    }
+
+    @Test
+    public void useItem_promptTest() {
+        String prompt = "2";
+//        potion = 0;
+//        superPotion = 0;
+
+        if (potion >= 1 && Integer.parseInt(prompt) == 1) {
+            potion -= 1;
+            activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
+            System.out.printf("You used Potion! Potion remaining: %s\n", potion);
+            System.out.printf("%s healed by %s points", activePokemon.getName(), POTION.getValue());
+        }
+        else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
+            superPotion -= 1;
+            activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
+            System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
+            System.out.printf("%s healed by %s points", activePokemon.getName(), SUPER_POTION.getValue());
+        }
+        else if (potion == 0 && superPotion == 0) {
+            System.out.println("You have ran out of potions!");
+        }
     }
 
     @Test

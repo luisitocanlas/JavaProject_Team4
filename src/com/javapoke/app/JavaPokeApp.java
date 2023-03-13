@@ -98,7 +98,8 @@ public class JavaPokeApp implements SplashApp {
      */
     private void choosePokemon() {
         Console.clear();
-        List<Pokemon> trainerPokemon = new LinkedList<>();
+//        List<Pokemon> trainerPokemon = new LinkedList<>();
+        Map<Integer, Pokemon> trainerPokemon = new HashMap<>();         // changed to map instead of list
         System.out.println(" Option \tPokemon \tLevel \tHP");
         System.out.println(" ====== \t======= \t===== \t===");
         for (Map.Entry<Integer, Pokemon> entry : pokemonMap.entrySet()) {
@@ -111,8 +112,9 @@ public class JavaPokeApp implements SplashApp {
         for (int i = 0; i < 4; i++) {
             String pokemonPrompt = prompter.prompt("Select pokemon #" + (i+1) + ": "
                     , "^[1-9]|10$", "\nThis is not a valid option!\n");
-            if(!trainerPokemon.contains(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
-                trainerPokemon.add(i,pokemonMap.get(Integer.parseInt(pokemonPrompt)));
+            if(!trainerPokemon.containsValue(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
+//                trainerPokemon.add(i,pokemonMap.get(Integer.parseInt(pokemonPrompt)));
+                trainerPokemon.put(i+1, pokemonMap.get(Integer.parseInt(pokemonPrompt)));   // from the change above
             }
             else {
                 System.out.println("Can not choose duplicate Pokemon for this challenge.");

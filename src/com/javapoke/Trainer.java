@@ -3,18 +3,19 @@ package com.javapoke;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Trainer {
     //fields
-    String name;
-    List<Pokemon> pokemon;
+    private String name;
+    private Map<Integer, Pokemon> pokemon;
 
     //constructors
     public Trainer(String name) {
         this.name = name;
     }
 
-    public Trainer(String name, List<Pokemon> pokemon) {
+    public Trainer(String name, Map<Integer, Pokemon> pokemon) {
         this.name = name;
         this.pokemon = pokemon;
     }
@@ -28,11 +29,11 @@ public class Trainer {
         this.name = name;
     }
 
-    public List<Pokemon> getPokemon() {
+    public Map<Integer, Pokemon> getPokemon() {
         return pokemon;
     }
 
-    public void setPokemon(List<Pokemon> pokemon) {
+    public void setPokemon(Map<Integer, Pokemon> pokemon) {
         this.pokemon = pokemon;
     }
 
