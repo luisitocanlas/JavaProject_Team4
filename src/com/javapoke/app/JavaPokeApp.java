@@ -9,29 +9,39 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class JavaPokeApp implements SplashApp{
+public class JavaPokeApp implements SplashApp {
     private static final int maxLength = 12;
     private static final String pokemonData = "data/Pokemon Chart.csv";
-    private final Map<Integer,Pokemon> pokemonMap = loadPokemonMap();
-    private final Prompter prompter = new Prompter(new Scanner(System.in));
 
+    private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
+    private final Prompter prompter = new Prompter(new Scanner(System.in));
     private Trainer trainer;
-    private final Scanner scanner = new Scanner(System.in);
 
     /*
      * This method will be the main method that will run the game through the controller
      */
+
+    @Override
+    public void start() {
+        beginChallenge();
+    }
+
+    @Override
+    public void welcome(String... strings) throws IllegalArgumentException {
+        SplashApp.super.welcome(strings);
+    }
+
     public void beginChallenge() {
-        welcome();
-        //chooseTrainer();
+        welcomePrompt();    // Completed
+        chooseTrainer();    // Completed
         //choosePokemon();
         //startGame();
         gameOver();
     }
 
     private void welcomeMessage() {
+//        welcome("Poke.png", "credits.png");
         System.out.println("W E L C O M E  T O  J A V A  P O K E!!!!");
-        start();
     }
 
     /*
@@ -40,24 +50,30 @@ public class JavaPokeApp implements SplashApp{
      * will be shown the rules(). If the player inputs "N/n" the loop will break
      * and continue to chooseTrainer() in beginChallenge()
      */
-    private void welcome() {
+    private void welcomePrompt() {
         welcomeMessage();
+        Console.blankLines(1);
 
-        prompter.prompt("Would you like to see the rules before starting our game? " +
+        String input = prompter.prompt("Would you like to see the rules before starting our game? " +
                 "Enter [Y]es or [N]o : ", "Y|N|y|n", "\nThis is not a valid option!\n");
+        if ("Y".equalsIgnoreCase(input)) {
+            rules();
+        }
     }
 
     /*
      * This method will produce the list of Rules and Objectives of the game.
      */
     private void rules() {
+        Console.blankLines(1);
         System.out.println("Objective: Defeat the Elite Four and be the #1 Pokemon Trainer");
-        System.out.println("R U L E S");
-        System.out.println("1. When you use an item or switch Pokemon during battle you " +
-                "will consume your turn and are open to be attacked");
-        System.out.println("2. In your items bag you will have a fixed amount of "
-                + "Potions and Super Potions. Use Wisely.");
-        System.out.println("3. Your items will not regenerate after a battle is completed");
+        Console.blankLines(1);
+        System.out.println("\t\t\t\t\t\t\tR U L E S:");
+        System.out.println("1. Using an item or switching Pokemon during battle " +
+                "will consume your turn.");
+        System.out.println("2. You'll be given a fixed amount of "
+                + "Potions and Super Potions (items).");
+        System.out.println("3. Your items will not regenerate after a battle is completed.");
         System.out.println("4. If all your pokemon have fainted. You lose!!!");
     }
 
@@ -65,13 +81,13 @@ public class JavaPokeApp implements SplashApp{
      * This method will produce a GAME OVER message to the user if called.
      */
     private void gameOver() {
-//        console.clear();
-        System.out.println("G A M E  O V E R  ! ! ! !");
+        Console.clear();
+        System.out.println("\t\tG A M E  O V E R  ! ! ! !");
         System.out.println("T H A N K  Y O U  F O R  P L A Y I N G  !");
     }
 
     private void startGame() {
-//        console.clear();
+        Console.clear();
     }
 
     /*
@@ -80,7 +96,7 @@ public class JavaPokeApp implements SplashApp{
      * the same Pokémon on the list.
      */
     private void choosePokemon() {
-//        console.clear();
+        Console.clear();
         boolean validInput = false;
 
         while (!validInput) {
@@ -89,12 +105,10 @@ public class JavaPokeApp implements SplashApp{
             // Here we will display the Map<Integer,Pokemon>    1-10   |   Pokemon Obj
 
             loadPokemonMap();
-
-
         }
     }
 
-    private Map<Integer, Pokemon> loadPokemonMap () {
+    private Map<Integer, Pokemon> loadPokemonMap() {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
 
         try {
@@ -102,13 +116,11 @@ public class JavaPokeApp implements SplashApp{
 
             for (String line : lines) {
                 String[] tokens = line.split(",");
-                if (tokens.length == 4) {
-                    pokemonMap.put(Integer.valueOf(tokens[0]),
-                            new Pokemon(tokens[1],Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3])));
-                }
-                else {
+                if (tokens.length != 4) {
                     throw new RuntimeException("Invalid Line in CSV file " + line);
                 }
+                pokemonMap.put(Integer.valueOf(tokens[0]),
+                        new Pokemon(tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,71 +128,52 @@ public class JavaPokeApp implements SplashApp{
         return pokemonMap;
     }
 
-    private static Pokemon getPokemon(String line) {
-        String[] tokens = line.split(",");
-        if (tokens.length != 3) {
-            throw new RuntimeException("Invalid Line in CSV file " + line);
-        }
-        return new Pokemon(tokens[1],Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
-    }
-
     private void chooseTrainer() {
-//        console.clear();
-        boolean validInput = false;
+        Console.clear();
+        System.out.println("T R A I N E R  S E L E C T I O N:");
+        System.out.println("If you'd like to create your own Trainer. Enter 1");
+        System.out.println("If you'd like to choose a Trainer. Enter 2");
+        String input = prompter.prompt("What choice would you like to choose: ", "1|2"
+                , "\nThis is not a valid option!\n");
+        if (Integer.parseInt(input) == 1) {
+            characterCreationPrompt();
+        } else {
+            trainerCollectionPrompt();
+        }
+        System.out.println(trainer);
+    }
 
-        while (!validInput) {
-            System.out.println("T R A I N E R  S E L E C T I O N:");
-            System.out.println("If you'd like to create your own Trainer. Enter 1");
-            System.out.println("If you'd like to choose a Trainer. Enter 2");
-            System.out.print("What choice would you like to choose: ");
-            String inputTrainer = scanner.nextLine().trim();
-            if (inputTrainer.matches("\\d{1}")) {
-                int input = Integer.parseInt(inputTrainer);
-                if (input == 1) {
-                    validInput = true;
-                    characterCreation();
-                } else if (input == 2) {
-                    validInput = true;
-                    trainerCollection();    // Print out the trainer collection to choose from
-                }
-            }
+    private void trainerCollectionPrompt() {
+        Console.clear();
+
+        List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
+                , new Trainer("Brock"), new Trainer("Misty")));
+
+        int optionNumber = 1;
+        for (Trainer value : trainers) {
+            System.out.println(optionNumber + ". " + value.getName());
+            optionNumber++;
+        }
+
+        String prompt = prompter.prompt("Which Trainer would you like to choose: ", "1|2|3",
+                "\nThis is not a valid option!\n");
+        if (Integer.parseInt(prompt) == 1) {
+            trainer = trainers.get(0);
+        } else if (Integer.parseInt(prompt) == 2) {
+            trainer = trainers.get(1);
+        } else {
+            trainer = trainers.get(2);
         }
     }
 
-    private void trainerCollection() {
-//        console.clear();
-
-        boolean validInput = false;
-
-        while (!validInput) {
-            // Showcase the collections of Trainers to choose from
-            System.out.println("Which Trainer would you like to choose: ");
-        }
-    }
-
-    private void characterCreation() {
-//        console.clear();
-
-        boolean validInput = false;
-
-        while (!validInput) {
-            System.out.println("What is the name of your Trainer: ");
-            String playerName = scanner.nextLine();
-            if (playerName.length() <= maxLength) {
-                Trainer player = new Trainer(playerName);
-                validInput = true;
-            } else {
-                System.out.printf("Name must not exceed %s characters", maxLength);
-            }
-        }
+    private void characterCreationPrompt() {
+        Console.clear();
+        String characterName = prompter.prompt("What is the name of your Trainer: ", "^.{1,12}$"
+                , "\nName must not exceed 12 characters!\n");
+        trainer = new Trainer(characterName);
     }
 
     public void dumpPokemonMap() {
         System.out.println(pokemonMap);
-    }
-
-    @Override
-    public void start() {
-
     }
 }
