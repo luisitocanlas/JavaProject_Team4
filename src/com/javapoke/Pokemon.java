@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 public class Pokemon {
     // fields
-    String name;
-    int level;
-    int hitPoints;
-    boolean isFainted = false;
-    String attack;     // [ attackName : attack damage ], might have to change this to just a name
+    private final String name;
+    private final int level;
+    private int hitPoints;
+    private boolean isFainted = false;
+    private String attack;     // [ attackName : attack damage ], might have to change this to just a name
                                         // attack damage will be handled by a number randomizer
 
     public Pokemon(String name, int level, int hitPoints){
@@ -28,10 +28,6 @@ public class Pokemon {
     // accessors
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getLevel() {
@@ -56,10 +52,6 @@ public class Pokemon {
 
     public String getAttack() {
         return attack;
-    }
-
-    public void setAttack(String attack) {
-        this.attack = attack;
     }
 
     @Override
