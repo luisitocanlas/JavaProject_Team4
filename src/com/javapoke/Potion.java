@@ -1,49 +1,16 @@
 package com.javapoke;
 
-class Potion {
-    // fields
-    String name;
-    int quantity;
-    int value;
+enum Potion {
+    POTION(25),
+    SUPER_POTION(50);
 
-    // constructors
-    public Potion(String name, int quantity, int value) {
-        this.name = name;
-        this.quantity = quantity;
+    private final int value;
+
+    private Potion(int value) {
         this.value = value;
-    }
-
-    // accessors
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public int getValue() {
         return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "Potion{" +
-                "name='" + getName() + '\'' +
-                ", quantity=" + getQuantity() +
-                ", value=" + getValue() +
-                '}';
     }
 }
