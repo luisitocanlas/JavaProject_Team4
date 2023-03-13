@@ -15,7 +15,7 @@ public class JavaPokeApp implements SplashApp {
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
-    private Trainer trainer;
+    private Trainer player;
 
     /*
      * This method will be the main method that will run the game through the controller
@@ -34,7 +34,7 @@ public class JavaPokeApp implements SplashApp {
     public void beginChallenge() {
         welcomePrompt();    // Completed
         chooseTrainer();    // Completed
-        //choosePokemon();
+        choosePokemon();
         //startGame();
         gameOver();
     }
@@ -75,6 +75,7 @@ public class JavaPokeApp implements SplashApp {
                 + "Potions and Super Potions (items).");
         System.out.println("3. Your items will not regenerate after a battle is completed.");
         System.out.println("4. If all your pokemon have fainted. You lose!!!");
+        System.out.println("5. The first Pokemon you pick will be 1st active in battle");
     }
 
     /*
@@ -97,15 +98,29 @@ public class JavaPokeApp implements SplashApp {
      */
     private void choosePokemon() {
         Console.clear();
-        boolean validInput = false;
-
-        while (!validInput) {
-            System.out.println("You may choose 4 pokemon to join you in your journey");
-            System.out.println("Select your 1st pokemon : ");
-            // Here we will display the Map<Integer,Pokemon>    1-10   |   Pokemon Obj
-
-            loadPokemonMap();
+        List<Pokemon> trainerPokemon = new LinkedList<>();
+        System.out.println(" Option \tPokemon \tLevel \tHP");
+        System.out.println(" ====== \t======= \t===== \t===");
+        for (Map.Entry<Integer, Pokemon> entry : pokemonMap.entrySet()) {
+            System.out.printf("   %s: \t\t%s \t %s \t%s\n"
+                    ,entry.getKey(),entry.getValue().getName()
+                    ,entry.getValue().getLevel(),entry.getValue().getHitPoints());
         }
+        Console.blankLines(2);
+        System.out.println("You may choose 4 pokemon to join you in your journey");
+        for (int i = 0; i < 4; i++) {
+            String pokemonPrompt = prompter.prompt("Select pokemon #" + (i+1) + ": "
+                    , "^[1-9]|10$", "\nThis is not a valid option!\n");
+            if(!trainerPokemon.contains(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
+                trainerPokemon.add(i,pokemonMap.get(Integer.parseInt(pokemonPrompt)));
+            }
+            else {
+                System.out.println("Can not choose duplicate Pokemon for this challenge.");
+                i--;
+            }
+        }
+        player.setPokemon(trainerPokemon);
+        System.out.println(player);
     }
 
     private Map<Integer, Pokemon> loadPokemonMap() {
@@ -140,7 +155,7 @@ public class JavaPokeApp implements SplashApp {
         } else {
             trainerCollectionPrompt();
         }
-        System.out.println(trainer);
+        System.out.println(player);
     }
 
     private void trainerCollectionPrompt() {
@@ -158,19 +173,20 @@ public class JavaPokeApp implements SplashApp {
         String prompt = prompter.prompt("Which Trainer would you like to choose: ", "1|2|3",
                 "\nThis is not a valid option!\n");
         if (Integer.parseInt(prompt) == 1) {
-            trainer = trainers.get(0);
+            player = trainers.get(0);
         } else if (Integer.parseInt(prompt) == 2) {
-            trainer = trainers.get(1);
+            player = trainers.get(1);
         } else {
-            trainer = trainers.get(2);
+            player = trainers.get(2);
         }
     }
 
+    // Fun Fact: Original game had a limit of 10 characters.
     private void characterCreationPrompt() {
         Console.clear();
         String characterName = prompter.prompt("What is the name of your Trainer: ", "^.{1,12}$"
                 , "\nName must not exceed 12 characters!\n");
-        trainer = new Trainer(characterName);
+        player = new Trainer(characterName);
     }
 
     public void dumpPokemonMap() {
