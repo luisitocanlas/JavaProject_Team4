@@ -8,7 +8,7 @@ public class Pokemon {
     int level;
     int hitPoints;
     boolean isFainted = false;
-    HashMap<String, Double> attack;     // [ attackName : attack damage ], might have to change this to just a name
+    String attack;     // [ attackName : attack damage ], might have to change this to just a name
                                         // attack damage will be handled by a number randomizer
 
     public Pokemon(String name, int level, int hitPoints){
@@ -18,7 +18,7 @@ public class Pokemon {
     }
 
     // constructors
-    public Pokemon(String name, int level, int hitPoints, HashMap<String, Double> attack) {
+    public Pokemon(String name, int level, int hitPoints, String attack) {
         this.name = name;
         this.level = level;
         this.hitPoints = hitPoints;
@@ -38,10 +38,6 @@ public class Pokemon {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public int getHitPoints() {
         return hitPoints;
     }
@@ -58,11 +54,11 @@ public class Pokemon {
         isFainted = fainted;
     }
 
-    public HashMap<String, Double> getAttack() {
+    public String getAttack() {
         return attack;
     }
 
-    public void setAttack(HashMap<String, Double> attack) {  // put attack(s) and its value for the pokemon to use
+    public void setAttack(String attack) {
         this.attack = attack;
     }
 
