@@ -1,0 +1,19 @@
+===============================================================
+||                                                           ||
+||   Option         Pokemon          Level           HP      ||
+||   ======         =======          =====          ====     ||
+||                                                           ||     
+||      1            Eevee             60           145      ||
+||      2            Blastoise         62           169      ||
+||      3            Charizard         62           168      ||
+||      4            Venusaur          62           171      ||           
+||      5            Pickachu          61           152      ||
+||      6            Snorlax           60           180      ||
+||      7            Alakazam          60           145      ||
+||      8            Gyardados         61           186      ||
+||      9            Machamp           61           165      ||
+||      10           Gengar            62           165      ||
+||                                                           ||
+===============================================================
+
+    You may choose four pokemon to join you on your journey.

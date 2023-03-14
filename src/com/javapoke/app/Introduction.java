@@ -34,8 +34,8 @@ class Introduction {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String input = prompter.prompt("\t\t\t\t\t\t Enter your input: "
-                , "Y|N|y|n", "\n\t\t\t\t\t This is not a valid option!\n");
+        String input = prompter.prompt("\t\t\t Enter your input: "
+                , "Y|N|y|n", "\n\t\t\t This is not a valid option!\n");
         if ("Y".equalsIgnoreCase(input)) {
             showRules();
         }
