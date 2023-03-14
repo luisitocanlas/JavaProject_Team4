@@ -52,8 +52,9 @@ public class PokeBattle {
     // list of opponents to go through
     Map<Integer, Trainer> opponents = Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4, 5,surprise);
 
-    // container for active opponent, maybe change this to the opponent's pokemon instead of the trainer
+    // container for active opponent, and their active pokemon, will initialize for the first opponent
     Trainer activeOpponent = elite1;
+    Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
     //------------------------------------------------------------------------------------------------------------------
 
     /*
@@ -61,10 +62,41 @@ public class PokeBattle {
      * other methods will be done for the future update.
      */
     // methods
+    public void nextOpponent() {
+        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
+            boolean hasValidPokemon = false;
+            for (int i = 0; i < opponent.getValue().getPokemon().size(); i++) {
+                if (opponent.getValue().getPokemon().get(i).getHitPoints() > 0) {
+                    activeOpponent = opponent.getValue();
+                    opponentPokemon = activeOpponent.getPokemon().get(i);
+                    hasValidPokemon = true;
+                    break;
+                }
+            }
+            if (hasValidPokemon) {
+                return;
+            }
+            else {
+                // When all the opponents' pokemons are fainted, go to game over or victory screen
+
+            }
+        }
+    }
+
     public void startPokeBattle() {
-        // pick a pokemon from your list, maybe use switchPokemon method here
-        // set activeOpponent to the first in the list
-        // show options: fight, items, switch
+        // will immediately face first elite 4
+        // give options to fight(), useItem(), switchPokemon()
+        String battlePrompt = prompter.prompt("Select [1] to fight, [2] to use an item, or [3] to switch pokemon",
+                "1|2|3", "\nThis is not a valid option!\n");
+        if (Integer.parseInt(battlePrompt) == 1){
+            fight();
+        }
+        else if (Integer.parseInt(battlePrompt) == 2) {
+            useItem();
+        }
+        else if (Integer.parseInt(battlePrompt) == 3) {
+            switchPokemon();
+        }
     }
 
     public void fight() {
@@ -72,29 +104,30 @@ public class PokeBattle {
         System.out.println(activePokemon);
         // show activeOpponent's pokemon
         System.out.println(activeOpponent.getPokemon().get(1));
-        Console.blankLines(1);
+        System.out.println();
 
         // player attacks
-        int damage = attackDamage();
+        int playerAttack = activePokemon.attack(activeOpponent.getPokemon().get(1));
         System.out.printf("%s uses %s\n", activePokemon.getName(), activePokemon.getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", damage,
-                activeOpponent.getPokemon().get(1).getName());
-        activeOpponent.getPokemon().get(1).setHitPoints(activeOpponent.getPokemon().get(1).getHitPoints()
-                - damage);
+        System.out.printf("Deals %s points of damage to %s\n", playerAttack, activeOpponent.getPokemon().get(1).getName());
+
         System.out.println(activeOpponent.getPokemon().get(1));
         System.out.println();
 
         // opponent attacks
-        int damage2 = attackDamage();
-        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(),
-                activeOpponent.getPokemon().get(1).getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", damage2, activePokemon.getName());
-        activePokemon.setHitPoints(activePokemon.getHitPoints() - damage2);
+        opponentTurn();
+
         System.out.println(activePokemon);
         System.out.println();
 
         // TODO: maybe do a check here if pokemon isFainted and trigger the either switch pokemon or next opponent
         //end of turn
+    }
+
+    private void opponentTurn() {
+        int opponentAttack = activeOpponent.getPokemon().get(1).attack(activePokemon);
+        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(), activeOpponent.getPokemon().get(1).getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
     }
 
     public void useItem() {
@@ -120,6 +153,7 @@ public class PokeBattle {
             System.out.println("You have ran out of potions!");
         }
         // computer attacks your pokemon
+        opponentTurn();
 
         // go back to main battle options
     }
@@ -133,6 +167,7 @@ public class PokeBattle {
             pokeSwitch();
 
             // computer attacks your pokemon
+            opponentTurn();
         }
 
         // else if you are in between fights [inBattle=false]
@@ -167,12 +202,5 @@ public class PokeBattle {
 
     public void runAway() {
         // go straight to game over, maybe say something cheeky
-    }
-
-    private int attackDamage() {
-        int pain = 0;
-        Random random = new Random();
-        pain = random.nextInt(30) + 1;      // damage will be between 1~30, attack modifier will be for future code
-        return pain;
     }
 }
