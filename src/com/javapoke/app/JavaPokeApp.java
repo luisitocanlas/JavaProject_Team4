@@ -15,11 +15,26 @@ public class JavaPokeApp implements SplashApp {
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
+    private final Introduction intro = new Introduction();
     private Trainer player;
+
+    /*
+     * TODO: work on chooseTrainer(), characterCreationPrompt(), and trainerCollectionPrompt()
+     * TODO: input trainer_selection.txt onto chooseTrainer()
+     * TODO: Create tests for prompts
+     */
 
     /*
      * This method will be the main method that will run the game through the controller
      */
+    public void beginChallenge() {
+//        welcome("Poke.png", "credits.png");
+        intro.startUp();
+        chooseTrainer();    // Completed
+        choosePokemon();
+        //startGame();
+        gameOver();
+    }
 
     @Override
     public void start() {
@@ -31,60 +46,19 @@ public class JavaPokeApp implements SplashApp {
         SplashApp.super.welcome(strings);
     }
 
-    public void beginChallenge() {
-        welcomePrompt();    // Completed
-        chooseTrainer();    // Completed
-        choosePokemon();
-        //startGame();
-        gameOver();
-    }
-
-    private void welcomeMessage() {
-//        welcome("Poke.png", "credits.png");
-        System.out.println("W E L C O M E  T O  J A V A  P O K E!!!!");
-    }
-
-    /*
-     * This method will welcome the user to the game and prompt the user if they would like
-     * to read the rules or not before starting the game. If the player inputs "Y/y" they
-     * will be shown the rules(). If the player inputs "N/n" the loop will break
-     * and continue to chooseTrainer() in beginChallenge()
-     */
-    private void welcomePrompt() {
-        welcomeMessage();
-        Console.blankLines(1);
-
-        String input = prompter.prompt("Would you like to see the rules before starting our game? " +
-                "Enter [Y]es or [N]o : ", "Y|N|y|n", "\nThis is not a valid option!\n");
-        if ("Y".equalsIgnoreCase(input)) {
-            rules();
-        }
-    }
-
-    /*
-     * This method will produce the list of Rules and Objectives of the game.
-     */
-    private void rules() {
-        Console.blankLines(1);
-        System.out.println("Objective: Defeat the Elite Four and be the #1 Pokemon Trainer");
-        Console.blankLines(1);
-        System.out.println("\t\t\t\t\t\t\tR U L E S:");
-        System.out.println("1. Using an item or switching Pokemon during battle " +
-                "will consume your turn.");
-        System.out.println("2. You'll be given a fixed amount of "
-                + "Potions and Super Potions (items).");
-        System.out.println("3. Your items will not regenerate after a battle is completed.");
-        System.out.println("4. If all your pokemon have fainted. You lose!!!");
-        System.out.println("5. The first Pokemon you pick will be 1st active in battle");
-    }
-
     /*
      * This method will produce a GAME OVER message to the user if called.
      */
     private void gameOver() {
         Console.clear();
-        System.out.println("\t\tG A M E  O V E R  ! ! ! !");
-        System.out.println("T H A N K  Y O U  F O R  P L A Y I N G  !");
+        try {
+            Files.readAllLines(Path.of("images/gameOver.txt")).forEach(System.out::println);
+            Console.pause(3000);
+            Files.readAllLines(Path.of("images/thank_you_message.txt"))
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startGame() {
@@ -96,6 +70,7 @@ public class JavaPokeApp implements SplashApp {
      * will add the Pokémon to their arsenal. Will need to make sure that the player may not choose
      * the same Pokémon on the list.
      */
+    // TODO work on the format of Eevee and Gengar #1 and #10
     private void choosePokemon() {
         Console.clear();
 //        List<Pokemon> trainerPokemon = new LinkedList<>();
@@ -104,19 +79,18 @@ public class JavaPokeApp implements SplashApp {
         System.out.println(" ====== \t======= \t===== \t===");
         for (Map.Entry<Integer, Pokemon> entry : pokemonMap.entrySet()) {
             System.out.printf("   %s: \t\t%s \t %s \t%s\n"
-                    ,entry.getKey(),entry.getValue().getName()
-                    ,entry.getValue().getLevel(),entry.getValue().getHitPoints());
+                    , entry.getKey(), entry.getValue().getName()
+                    , entry.getValue().getLevel(), entry.getValue().getHitPoints());
         }
         Console.blankLines(2);
         System.out.println("You may choose 4 pokemon to join you in your journey");
         for (int i = 0; i < 4; i++) {
-            String pokemonPrompt = prompter.prompt("Select pokemon #" + (i+1) + ": "
+            String pokemonPrompt = prompter.prompt("Select pokemon #" + (i + 1) + ": "
                     , "^[1-9]|10$", "\nThis is not a valid option!\n");
-            if(!trainerPokemon.containsValue(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
+            if (!trainerPokemon.containsValue(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
 //                trainerPokemon.add(i,pokemonMap.get(Integer.parseInt(pokemonPrompt)));
-                trainerPokemon.put(i+1, pokemonMap.get(Integer.parseInt(pokemonPrompt)));   // from the change above
-            }
-            else {
+                trainerPokemon.put(i + 1, pokemonMap.get(Integer.parseInt(pokemonPrompt)));   // from the change above
+            } else {
                 System.out.println("Can not choose duplicate Pokemon for this challenge.");
                 i--;
             }
@@ -125,7 +99,8 @@ public class JavaPokeApp implements SplashApp {
         System.out.println(player);
     }
 
-    private Map<Integer, Pokemon> loadPokemonMap() {
+    private Map<Integer, Pokemon> loadPokemonMap()
+    throws RuntimeException {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
 
         try {
@@ -172,6 +147,7 @@ public class JavaPokeApp implements SplashApp {
             optionNumber++;
         }
 
+        //TODO: ^[1-4]$ for inputs 1-4 [1. Ash 2. Misty 3. Brock 4. Create your own Trainer]
         String prompt = prompter.prompt("Which Trainer would you like to choose: ", "1|2|3",
                 "\nThis is not a valid option!\n");
         if (Integer.parseInt(prompt) == 1) {
@@ -189,9 +165,5 @@ public class JavaPokeApp implements SplashApp {
         String characterName = prompter.prompt("What is the name of your Trainer: ", "^.{1,12}$"
                 , "\nName must not exceed 12 characters!\n");
         player = new Trainer(characterName);
-    }
-
-    public void dumpPokemonMap() {
-        System.out.println(pokemonMap);
     }
 }
