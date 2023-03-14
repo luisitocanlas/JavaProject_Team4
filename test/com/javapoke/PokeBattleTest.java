@@ -1,12 +1,10 @@
 package com.javapoke;
 
-import com.apps.util.Console;
 import com.apps.util.Prompter;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.apps.util.Console.clear;
 import static com.javapoke.Potion.*;
@@ -14,7 +12,7 @@ import static com.javapoke.Potion.*;
 public class PokeBattleTest {
     // fixture
     private Prompter prompter;
-    Trainer trainer;
+    Trainer player;
     Trainer elite1;
     Trainer elite2;
     Trainer elite3;
@@ -62,7 +60,7 @@ public class PokeBattleTest {
         pokeBelt2 = Map.of(1,squirtle, 2,charmander, 3,bulbasaur);
 
         // TODO: implement the option to choose from a list of names or type in their own name
-        trainer = new Trainer("Ash", pokeBelt);              // will be replaced by the chooserTrainer()
+        player = new Trainer("Ash", pokeBelt);              // will be replaced by the chooserTrainer()
         elite1 = new Trainer("Lorelei", Map.of(1, lapras));
         elite2 = new Trainer("Bruno", Map.of(1,machamp));
         elite3 = new Trainer("Agatha", Map.of(1,gengar));
@@ -71,7 +69,7 @@ public class PokeBattleTest {
 
         // TODO: implement something that tells you which is the current active pokemon
         // container for the active pokemon for the current battle
-        activePokemon = trainer.getPokemon().get(1);
+        activePokemon = player.getPokemon().get(1);
 
         // list of opponents to go through
         opponents = new ArrayList<>(List.of(elite1, elite2, elite3, elite4, surprise));
@@ -106,7 +104,7 @@ public class PokeBattleTest {
         // show activePokemon
         System.out.println(activePokemon);
         // show activeOpponent's pokemon
-        System.out.println(activeOpponent.getPokemon().get(1));
+        System.out.println(opponentPokemon);
         System.out.println();
 
         // player attacks
@@ -154,16 +152,16 @@ public class PokeBattleTest {
     }
 
     private void pokeSwitch() {
-        System.out.println(" Option \tPokemon \tLevel \tHP");
-        System.out.println(" ====== \t======= \t===== \t===");
-        for (Map.Entry<Integer, Pokemon> pokemon : pokeBelt.entrySet()) {
-            System.out.printf("   %s: \t\t%s \t %s \t%s\n"
+        System.out.println(" Option \tPokemon    \tLevel \tHP  \tisFainted");
+        System.out.println(" ====== \t========== \t===== \t=== \t=========");
+        for (Map.Entry<Integer, Pokemon> pokemon : player.getPokemon().entrySet()) {
+            System.out.printf("   %s: \t\t%s \t %s \t%s \t%s\n"
                     , pokemon.getKey(), pokemon.getValue().getName()
-                    , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints());
+                    , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints(), pokemon.getValue().isFainted());
         }
-        String pokemonPrompt = "3";
+        String pokemonPrompt = "1";     // Select pokemon # from your
 //        String pokemonPrompt = prompter.prompt("Select pokemon #", "1|2|3|4", "\nThis is not a valid option!\n");
-        Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
+        Pokemon selectedPokemon = player.getPokemon().get(Integer.parseInt(pokemonPrompt));
         if (selectedPokemon.isFainted() || selectedPokemon.getHitPoints() <= 0) {
             System.out.println("Cannot select pokemon");
         }
@@ -175,9 +173,11 @@ public class PokeBattleTest {
 
     @Test
     public void useItem_promptTest() {
-        String prompt = "2";
-//        potion = 0;
-//        superPotion = 0;
+//        String prompt = prompter.prompt("Select [1] for Potion or [2] for Super Potion: ", "1|2",
+//                "\nThis is not a valid option!\n");
+        String prompt = "2";        // Select [1] for Potion or [2] for Super Potion
+//        potion = 0;           // set quantity to 0
+//        superPotion = 0;      // set quantity to 0
 
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
             potion -= 1;
@@ -197,35 +197,15 @@ public class PokeBattleTest {
     }
 
     @Test
-    public void trainerAccess_Potion() {
-        Stream.of(Potion.values()).forEach(System.out::println); // show list of potions
-        System.out.println();
-
-        System.out.println(potion);                              // check values
-        System.out.println(activePokemon.getHitPoints());
-        System.out.println();
-
-        activePokemon.setHitPoints(96);                          // change hp value
-        System.out.println(activePokemon.getHitPoints());
-        System.out.println();
-
-        potion -= 1;                                             // use potion
-        activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
-        System.out.println(potion);
-        System.out.println(activePokemon.getHitPoints());
-        System.out.println();
-    }
-
-    @Test
     public void trainerAccess_PokemonAttack() {
         System.out.println(activePokemon);
-        System.out.println(trainer.getPokemon().get(1).getAttack());
+        System.out.println(player.getPokemon().get(1).getAttack());
     }
 
     @Test
     public void trainerAccessTest() {
-        System.out.println(trainer.getClass().getSimpleName());
-        System.out.println(trainer.getName());
-        System.out.println(trainer.getPokemon());
+        System.out.println(player.getClass().getSimpleName());
+        System.out.println(player.getName());
+        System.out.println(player.getPokemon());
     }
 }
