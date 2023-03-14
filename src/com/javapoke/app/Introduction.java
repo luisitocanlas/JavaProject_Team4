@@ -15,6 +15,7 @@ class Introduction {
     }
 
     public void startUp() {
+        welcomeMessage();
         welcomePrompt();
     }
 
@@ -25,7 +26,6 @@ class Introduction {
      * and continue in com.javapoke.app.JavaPokeApp beginChallenge()
      */
     private void welcomePrompt() {
-        welcomeMessage();
         blankLines(1);
         clear();
         String rulesOption = "images/rules_option.txt";
