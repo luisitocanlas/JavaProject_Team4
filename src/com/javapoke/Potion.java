@@ -1,6 +1,6 @@
 package com.javapoke;
 
-enum Potion {
+public enum Potion {
     POTION(25),
     SUPER_POTION(50);
 
