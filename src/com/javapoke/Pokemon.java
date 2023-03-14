@@ -29,9 +29,10 @@ public class Pokemon {
      * int damage = Attack.getDamage()
      * other.setHitPoints -= damage;
      */
-    public void attack(Pokemon other) {
+    public int attack(Pokemon other) {
         int damage = Attack.getDamage();
         other.takeDamage(damage);
+        return damage;
     }
 
     // accessors
@@ -47,7 +48,7 @@ public class Pokemon {
         return hitPoints;
     }
 
-    public int takeDamage(int damage) {
+    private int takeDamage(int damage) {
         return this.hitPoints -= damage;
     }
 
