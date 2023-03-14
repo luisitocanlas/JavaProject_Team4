@@ -9,13 +9,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.apps.util.Console.*;
+
 public class JavaPokeApp implements SplashApp {
     private static final int maxLength = 12;
     private static final String pokemonData = "data/Pokemon Chart.csv";
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
-    private final Introduction intro = new Introduction();
+    private final Introduction intro = new Introduction(prompter);
     private Trainer player;
 
     /*
@@ -28,7 +30,6 @@ public class JavaPokeApp implements SplashApp {
      * This method will be the main method that will run the game through the controller
      */
     public void beginChallenge() {
-//        welcome("Poke.png", "credits.png");
         intro.startUp();
         chooseTrainer();    // Completed
         choosePokemon();
@@ -41,16 +42,11 @@ public class JavaPokeApp implements SplashApp {
         beginChallenge();
     }
 
-    @Override
-    public void welcome(String... strings) throws IllegalArgumentException {
-        SplashApp.super.welcome(strings);
-    }
-
     /*
      * This method will produce a GAME OVER message to the user if called.
      */
     private void gameOver() {
-        Console.clear();
+        clear();
         try {
             Files.readAllLines(Path.of("images/gameOver.txt")).forEach(System.out::println);
             Console.pause(3000);
@@ -62,7 +58,7 @@ public class JavaPokeApp implements SplashApp {
     }
 
     private void startGame() {
-        Console.clear();
+        clear();
     }
 
     /*
@@ -72,7 +68,7 @@ public class JavaPokeApp implements SplashApp {
      */
     // TODO work on the format of Eevee and Gengar #1 and #10
     private void choosePokemon() {
-        Console.clear();
+        clear();
 //        List<Pokemon> trainerPokemon = new LinkedList<>();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();         // changed to map instead of list
         System.out.println(" Option \tPokemon \tLevel \tHP");
@@ -121,7 +117,7 @@ public class JavaPokeApp implements SplashApp {
     }
 
     private void chooseTrainer() {
-        Console.clear();
+        clear();
         System.out.println("T R A I N E R  S E L E C T I O N:");
         System.out.println("If you'd like to create your own Trainer. Enter 1");
         System.out.println("If you'd like to choose a Trainer. Enter 2");
@@ -136,7 +132,7 @@ public class JavaPokeApp implements SplashApp {
     }
 
     private void trainerCollectionPrompt() {
-        Console.clear();
+        clear();
 
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Brock"), new Trainer("Misty")));
@@ -161,7 +157,7 @@ public class JavaPokeApp implements SplashApp {
 
     // Fun Fact: Original game had a limit of 10 characters.
     private void characterCreationPrompt() {
-        Console.clear();
+        clear();
         String characterName = prompter.prompt("What is the name of your Trainer: ", "^.{1,12}$"
                 , "\nName must not exceed 12 characters!\n");
         player = new Trainer(characterName);
