@@ -1,15 +1,18 @@
 package com.javapoke.app;
 
-import com.apps.util.Console;
+import static com.apps.util.Console.*;
 import com.apps.util.Prompter;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner;
 
 class Introduction {
-    private final Prompter prompter = new Prompter(new Scanner(System.in));
+    private final Prompter prompter;
+
+    Introduction(Prompter prompter) {
+        this.prompter = prompter;
+    }
 
     public void startUp() {
         welcomePrompt();
@@ -23,8 +26,8 @@ class Introduction {
      */
     private void welcomePrompt() {
         welcomeMessage();
-        Console.blankLines(1);
-        Console.clear();
+        blankLines(1);
+        clear();
         String rulesOption = "images/rules_option.txt";
         try {
             Files.readAllLines(Path.of(rulesOption)).forEach(System.out::println);
@@ -34,31 +37,28 @@ class Introduction {
         String input = prompter.prompt("\t\t\t\t\t\t Enter your input: "
                 , "Y|N|y|n", "\n\t\t\t\t\t This is not a valid option!\n");
         if ("Y".equalsIgnoreCase(input)) {
-            rules();
+            showRules();
         }
     }
 
     private void welcomeMessage() {
+        String introBanner = "images/intro_banner.txt";
         try {
-            String introBanner = "images/intro_banner.txt";
             Files.readAllLines(Path.of(introBanner)).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Console.pause(5_000); // 5 secs
+        pause(5_000); // 5 secs
     }
 
-    /*
-     * This method will produce the list of Rules and Objectives of the game.
-     */
-    private void rules() {
-        Console.clear();
+    private void showRules() {
+        clear();
         String rules = "images/rules.txt";
         try {
             Files.readAllLines(Path.of(rules)).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Console.pause(25_000); // 25 secs should be enough for the reader to read all rules. Ask lui
+        pause(25_000); // 25 secs should be enough for the reader to read all rules. Ask lui
     }
 }

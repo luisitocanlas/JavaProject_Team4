@@ -5,6 +5,7 @@ import com.apps.util.Prompter;
 
 import java.util.*;
 import java.util.stream.Stream;
+import static com.apps.util.Console.*;
 
 import static com.javapoke.Potion.*;
 
@@ -71,7 +72,7 @@ public class PokeBattle {
         System.out.println(activePokemon);
         // show activeOpponent's pokemon
         System.out.println(activeOpponent.getPokemon().get(1));
-        System.out.println();
+        Console.blankLines(1);
 
         // player attacks
         int damage = attackDamage();
@@ -97,7 +98,7 @@ public class PokeBattle {
     }
 
     public void useItem() {
-        Console.clear();
+        clear();
         // TODO: make sure when using potions, HP doesn't go past the max HP.
         // ask the player which potion to use
         String prompt = prompter.prompt("Select [1] for Potion or [2] for Super Potion: ", "1|2",
@@ -124,7 +125,7 @@ public class PokeBattle {
     }
 
     public void switchPokemon() {
-        Console.clear();
+        clear();
 
         // if in a battle [inBattle = true]
         if (!inBattle) {

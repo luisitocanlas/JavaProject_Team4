@@ -25,6 +25,15 @@ public class Pokemon {
         this.attack = attack;
     }
 
+    /*
+     * int damage = Attack.getDamage()
+     * other.setHitPoints -= damage;
+     */
+    public void attack(Pokemon other) {
+        int damage = Attack.getDamage();
+        other.takeDamage(damage);
+    }
+
     // accessors
     public String getName() {
         return name;
@@ -36,6 +45,10 @@ public class Pokemon {
 
     public int getHitPoints() {
         return hitPoints;
+    }
+
+    public int takeDamage(int damage) {
+        return this.hitPoints -= damage;
     }
 
     public void setHitPoints(int hitPoints) {
