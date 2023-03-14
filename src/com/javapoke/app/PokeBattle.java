@@ -1,7 +1,9 @@
-package com.javapoke;
+package com.javapoke.app;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
+import com.javapoke.Pokemon;
+import com.javapoke.Trainer;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -16,9 +18,8 @@ public class PokeBattle {
     List<Pokemon> pokeStorage;      // will contain the pokemon selected by the user by the choosePokemon()
 
     /*
-     * Code within the dashes are used for method functionality, may keep some of them
+     * Code within the dashes are used for method functionality, may keep some of them----------------------------------
      */
-    //------------------------------------------------------------------------------------------------------------------
     // Potion Counter
     int potion = 10;
     int superPotion = 5;
@@ -58,76 +59,52 @@ public class PokeBattle {
     //------------------------------------------------------------------------------------------------------------------
 
     /*
-     * These methods are only for the user. The computer will only use fight(), implementation of the
-     * other methods will be done for the future update.
+     * Below are the main methods---------------------------------------------------------------------------------------
      */
-    // methods
-    public void nextOpponent() {
-        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
-            boolean hasValidPokemon = false;
-            for (int i = 0; i < opponent.getValue().getPokemon().size(); i++) {
-                if (opponent.getValue().getPokemon().get(i).getHitPoints() > 0) {
-                    activeOpponent = opponent.getValue();
-                    opponentPokemon = activeOpponent.getPokemon().get(i);
-                    hasValidPokemon = true;
-                    break;
-                }
-            }
-            if (hasValidPokemon) {
-                return;
-            }
-            else {
-                // When all the opponents' pokemons are fainted, go to game over or victory screen
-
-            }
-        }
-    }
-
     public void startPokeBattle() {
-        // will immediately face first elite 4
-        // give options to fight(), useItem(), switchPokemon()
-        String battlePrompt = prompter.prompt("Select [1] to fight, [2] to use an item, or [3] to switch pokemon",
-                "1|2|3", "\nThis is not a valid option!\n");
-        if (Integer.parseInt(battlePrompt) == 1){
-            fight();
-        }
-        else if (Integer.parseInt(battlePrompt) == 2) {
-            useItem();
-        }
-        else if (Integer.parseInt(battlePrompt) == 3) {
-            switchPokemon();
+        clear();
+
+        String battlePrompt = prompter.prompt("What will you do?", "1|2|3|4", "\nThis is not a valid option!\n");
+        switch (Integer.parseInt(battlePrompt)) {
+            case 1:
+                fight();
+                break;
+            case 2:
+                useItem();
+                break;
+            case 3:
+                switchPokemon();
+                break;
+            case 4:
+                runAway();
+                break;
         }
     }
 
     public void fight() {
-        // show activePokemon
-        System.out.println(activePokemon);
-        // show activeOpponent's pokemon
-        System.out.println(activeOpponent.getPokemon().get(1));
-        System.out.println();
+        clear();
 
         // player attacks
-        int playerAttack = activePokemon.attack(activeOpponent.getPokemon().get(1));
+        int playerAttack = activePokemon.attack(opponentPokemon);
         System.out.printf("%s uses %s\n", activePokemon.getName(), activePokemon.getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", playerAttack, activeOpponent.getPokemon().get(1).getName());
-
-        System.out.println(activeOpponent.getPokemon().get(1));
-        System.out.println();
+        System.out.printf("Deals %s points of damage to %s\n", playerAttack, opponentPokemon.getName());
 
         // opponent attacks
         opponentTurn();
 
-        System.out.println(activePokemon);
-        System.out.println();
-
         // TODO: maybe do a check here if pokemon isFainted and trigger the either switch pokemon or next opponent
+        if (activePokemon.getHitPoints() <= 0) {         // if your pokemon fainted, automatically call switch pokemon
+            System.out.println("Your pokemon fainted from battle.");
+            switchPokemon();
+        }
+        //else if () {    // if your opponent's pokemon fainted, switch to the next one
+        //
+        //}
+        //else if () {    // if you defeat all your of current opponent's pokemons, call next opponent
+        //
+        //}
         //end of turn
-    }
-
-    private void opponentTurn() {
-        int opponentAttack = activeOpponent.getPokemon().get(1).attack(activePokemon);
-        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(), activeOpponent.getPokemon().get(1).getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
+        startPokeBattle();
     }
 
     public void useItem() {
@@ -156,6 +133,7 @@ public class PokeBattle {
         opponentTurn();
 
         // go back to main battle options
+        startPokeBattle();
     }
 
     public void switchPokemon() {
@@ -164,24 +142,53 @@ public class PokeBattle {
         // if in a battle [inBattle = true]
         if (!inBattle) {
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
+            System.out.println("Choose a Pokemon.");
             pokeSwitch();
-
             // computer attacks your pokemon
             opponentTurn();
         }
-
         // else if you are in between fights [inBattle=false]
         else if (inBattle) {
             // will output the list of pokemon available, their LVL and HP, and user will select from the list
             pokeSwitch();
-
             // switch [inBattle=true]
             inBattle = true;
-            // go to the next battle, maybe call start battle here?
+        }
+        // go back to main battle options
+        startPokeBattle();
+    }
+
+    public void runAway() {
+        clear();
+        // TODO: go straight to game over, maybe say something cheeky
+    }
+
+    /*
+     * Below are the helper methods-------------------------------------------------------------------------------------
+     */
+    public void nextOpponent() {
+        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
+            boolean hasValidPokemon = false;
+            for (int i = 0; i < opponent.getValue().getPokemon().size(); i++) {
+                if (opponent.getValue().getPokemon().get(i).getHitPoints() > 0) {
+                    activeOpponent = opponent.getValue();
+                    opponentPokemon = activeOpponent.getPokemon().get(i);
+                    hasValidPokemon = true;
+                    break;
+                }
+            }
+            if (hasValidPokemon) {
+                return;
+            }
+            else {
+                System.out.println("You defeated the Elite 4 and the surprise champion!");
+                runAway();
+            }
         }
     }
 
     private void pokeSwitch() {
+        clear();
         System.out.println(" Option \tPokemon \tLevel \tHP");
         System.out.println(" ====== \t======= \t===== \t===");
         for (Map.Entry<Integer, Pokemon> pokemon : pokeBelt.entrySet()) {
@@ -190,17 +197,19 @@ public class PokeBattle {
                     , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints());
         }
         String pokemonPrompt = prompter.prompt("Select pokemon #", "1|2|3|4", "\nThis is not a valid option!\n");
-        if (trainer.getPokemon().get(Integer.parseInt(pokemonPrompt)).isFainted() ||
-                trainer.getPokemon().get(Integer.parseInt(pokemonPrompt)).getHitPoints() <= 0) {
+        Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
+        if (selectedPokemon.isFainted() || selectedPokemon.getHitPoints() <= 0) {
             System.out.println("Cannot select pokemon");
         }
         else {
-            activePokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
+            activePokemon = selectedPokemon;
             System.out.printf("%s is selected.", activePokemon.getName());
         }
     }
 
-    public void runAway() {
-        // go straight to game over, maybe say something cheeky
+    private void opponentTurn() {
+        int opponentAttack = opponentPokemon.attack(activePokemon);
+        System.out.printf("%s uses %s\n", opponentPokemon.getName(), opponentPokemon.getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
     }
 }
