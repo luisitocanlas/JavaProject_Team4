@@ -41,7 +41,7 @@ public class PokeBattleTest {
 
     @Before
     public void setUp() {
-         prompter = new Prompter(new Scanner(System.in));
+        prompter = new Prompter(new Scanner(System.in));
 
         // TODO: figure out how to do this when getting the data from the csv.file and user prompts
         // create pokemon and add the attacks
@@ -78,6 +78,8 @@ public class PokeBattleTest {
         activeOpponent = elite1;
     }
 
+
+
     @Test
     public void fight_attackAndReceiveDamage() {
         // show activePokemon
@@ -87,32 +89,22 @@ public class PokeBattleTest {
         System.out.println();
 
         // player attacks
-        int damage = attackDamage();
+        int playerAttack = activePokemon.attack(activeOpponent.getPokemon().get(1));
         System.out.printf("%s uses %s\n", activePokemon.getName(), activePokemon.getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", damage,
-                activeOpponent.getPokemon().get(1).getName());
-        activeOpponent.getPokemon().get(1).setHitPoints(activeOpponent.getPokemon().get(1).getHitPoints()
-                - damage);
+        System.out.printf("Deals %s points of damage to %s\n", playerAttack, activeOpponent.getPokemon().get(1).getName());
+
         System.out.println(activeOpponent.getPokemon().get(1));
         System.out.println();
 
         // opponent attacks
-        int damage2 = attackDamage();
-        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(),
-                activeOpponent.getPokemon().get(1).getAttack());
-        System.out.printf("Deals %s points of damage to %s\n", damage2, activePokemon.getName());
-        activePokemon.setHitPoints(activePokemon.getHitPoints() - damage2);
+        int opponentAttack = activeOpponent.getPokemon().get(1).attack(activePokemon);
+        System.out.printf("%s uses %s\n", activeOpponent.getPokemon().get(1).getName(), activeOpponent.getPokemon().get(1).getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
+
         System.out.println(activePokemon);
         System.out.println();
 
         //end of turn
-    }
-
-    private int attackDamage() {
-        int pain = 0;
-        Random random = new Random();
-        pain = random.nextInt(30) + 1;      // damage will be between 1~30, attack modifier will be for future code
-        return pain;
     }
 
     @Test
@@ -154,14 +146,6 @@ public class PokeBattleTest {
             activePokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
             System.out.printf("%s is selected.", activePokemon.getName());
         }
-    }
-
-    @Test
-    public void pokeBattle_damageTest() {
-        int pain = 0;
-        Random random = new Random();
-        pain = random.nextInt(30) + 1;
-        System.out.println(pain);
     }
 
     @Test
