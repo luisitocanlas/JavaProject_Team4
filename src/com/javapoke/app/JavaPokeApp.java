@@ -23,19 +23,20 @@ public class JavaPokeApp implements SplashApp {
 
     /*
      * TODO: Create tests for prompts
+     * TODO: Change all methods back to Private after all tests are completed
      */
 
-    public void beginChallenge() {
+    @Override
+    public void start() {
+        beginChallenge();
+    }
+
+    private void beginChallenge() {
         intro.startUp();    // Completed
         chooseTrainer();    // Completed
         choosePokemon();    // Completed
         //startGame();
         gameOver();
-    }
-
-    @Override
-    public void start() {
-        beginChallenge();
     }
 
     private void gameOver() {
@@ -83,7 +84,7 @@ public class JavaPokeApp implements SplashApp {
         System.out.println(player);
     }
 
-    private Map<Integer, Pokemon> loadPokemonMap()
+    public Map<Integer, Pokemon> loadPokemonMap()
     throws RuntimeException {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
 
