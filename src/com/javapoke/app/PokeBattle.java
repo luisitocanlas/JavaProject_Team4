@@ -12,7 +12,7 @@ import static com.javapoke.Potion.*;
 
 
 public class PokeBattle {
-    private final Prompter prompter = new Prompter(new Scanner(System.in));
+    private final Prompter prompter;
     boolean inBattle = false;               // will be a check when switching pokemon
     Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
 
@@ -56,6 +56,11 @@ public class PokeBattle {
     // container for active opponent, and their active pokemon, will initialize for the first opponent
     Trainer activeOpponent = elite1;
     Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
+
+    // ctor
+    public PokeBattle(Prompter prompter) {
+        this.prompter = prompter;
+    }
 
     /*
      * Main methods-----------------------------------------------------------------------------------------------------
