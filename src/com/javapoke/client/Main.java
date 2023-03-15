@@ -16,10 +16,10 @@ class Main {
 //                , Files.readString(Path.of("images/pokemon/Alakazam.txt")));
 //        System.out.println(pokemon.getArt());
 
-        EliteTrainer lance = new EliteTrainer().loadLance();
+//        EliteTrainer lance = new EliteTrainer().loadLance();
 
 //        elite1 = (EliteTrainer) elite1.loadLance();
-        System.out.println(lance);
+//        System.out.println(lance);
         // Uncomment Thursday night and make sure to run "run-splash.cmd" during presentation
 //        app.welcome("images/Poke.png", "images/credits.png");
         app.start();

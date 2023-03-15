@@ -44,7 +44,8 @@ public class JavaPokeApp implements SplashApp {
     private void gameOver() {
         clear();
         try {
-            Files.readAllLines(Path.of("images/gameOver.txt")).forEach(System.out::println);
+            Files.readAllLines(Path.of("images/gameOver.txt"))
+                    .forEach(System.out::println);
             Console.pause(3000);
             Files.readAllLines(Path.of("images/thank_you_message.txt"))
                     .forEach(System.out::println);
@@ -67,17 +68,18 @@ public class JavaPokeApp implements SplashApp {
         clear();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();      // changed to map instead of list
         try {
-            Files.readAllLines(Path.of("images/PokemonChart.txt")).forEach(System.out::println);
+            Files.readAllLines(Path.of("images/PokemonChart.txt"))
+                    .forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         blankLines(1);
         for (int i = 0; i < maxNumOfPokemon; i++) {
-            String pokemonPrompt = prompter.prompt("\t Input the Option # to select pokemon #" + (i + 1) + ": "
-                    , "^[1-9]|10$", "\n\t\t This is not a valid option!\n");
+            String pokemonPrompt = prompter.prompt("\t Input the Option # to select pokemon #" +
+                    (i + 1) + ": ", "^[1-9]|10$", "\n\t\t This is not a valid option!\n");
             if (!trainerPokemon.containsValue(pokemonMap.get(Integer.parseInt(pokemonPrompt)))) {
-                trainerPokemon.put(i + 1, pokemonMap.get(Integer.parseInt(pokemonPrompt)));   // from the change above
+                trainerPokemon.put(i + 1, pokemonMap.get(Integer.parseInt(pokemonPrompt)));
             } else {
                 System.out.println("\n     Can not choose duplicate Pokemon for this challenge.\n");
                 i--;
@@ -100,7 +102,8 @@ public class JavaPokeApp implements SplashApp {
                     throw new RuntimeException("Invalid Line in CSV file " + line);
                 }
                 pokemonMap.put(Integer.valueOf(tokens[0]),
-                        new Pokemon(tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]), tokens[4]));
+                        new Pokemon(tokens[1], Integer.parseInt(tokens[2]),
+                                Integer.parseInt(tokens[3]), tokens[4]));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,7 +119,8 @@ public class JavaPokeApp implements SplashApp {
 
         String trainerPrompt = "images/trainer_selection.txt";
         try {
-            Files.readAllLines(Path.of(trainerPrompt)).forEach(System.out::println);
+            Files.readAllLines(Path.of(trainerPrompt))
+                    .forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
