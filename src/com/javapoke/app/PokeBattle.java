@@ -44,19 +44,21 @@ public class PokeBattle {
     Pokemon dragonite = new Pokemon("Dragonite", 60, 5, "Hyper Beam");
     Pokemon mewtwo = new Pokemon("Mewtwo", 60, 5, "Psychic");
 
+    //, 2, charmander, 3, squirtle, 4, bulbasaur
+
     // load opponents
-    Trainer elite1 = new Trainer("Lorelei", Map.of(1, lapras, 2, charmander, 3, squirtle, 4, bulbasaur));
-    Trainer elite2 = new Trainer("Bruno", Map.of(1, machamp, 2, charmander, 3, squirtle, 4, bulbasaur));
-    Trainer elite3 = new Trainer("Agatha", Map.of(1, gengar, 2, charmander, 3, squirtle, 4, bulbasaur));
-    Trainer elite4 = new Trainer("Lance", Map.of(1, dragonite, 2, charmander, 3, squirtle, 4, bulbasaur));
-    Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo, 2, charmander, 3, squirtle, 4, bulbasaur));
+    Trainer elite1 = new Trainer("Lorelei", Map.of(1, lapras));
+    Trainer elite2 = new Trainer("Bruno", Map.of(1, machamp));
+    Trainer elite3 = new Trainer("Agatha", Map.of(1, gengar));
+    Trainer elite4 = new Trainer("Lance", Map.of(1, dragonite));
+    Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo));
     //------------------------------------------------------------------------------------------------------------------
 
     /*
      * Containers-------------------------------------------------------------------------------------------------------
      */
     // list of opponents to go through, data will be from csv
-    Map<Integer, Trainer> opponents = Map.of(1, elite1, 2, elite2, 3, elite3, 4, elite4);
+    Map<Integer, Trainer> opponents = Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4);
 //    TreeMap<Integer, Trainer> opponents = (TreeMap<Integer, Trainer>) Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4);
 
     // container for active opponent, and their active pokemon, will initialize for the first opponent
@@ -73,7 +75,15 @@ public class PokeBattle {
         activePokemon = trainer.getPokemon().get(1);
         // go to battle!
         battle();
-//        return trainer;
+    }
+
+    private void battleOver() {
+        System.out.println("I can't believe it...");
+        pause(2_500);
+        System.out.printf("You really beat %s!\n", surprise.getName());
+        pause(2_500);
+        System.out.println("But there are more challenges ahead, brace yourself\n");
+        pause(2_500);
     }
 
     // create a method for the battle
@@ -81,10 +91,15 @@ public class PokeBattle {
         clear();
         inBattle = true;
 
-        // show activePokemon details here
-        System.out.println(activePokemon);
+
         // show opponentPokemon details here
+        System.out.println(activeOpponent.getName());
         System.out.println(opponentPokemon);
+        blankLines(1);
+        // show activePokemon details here
+        System.out.println(trainer.getName());
+        System.out.println(activePokemon);
+
         blankLines(1);
 
         System.out.println("[1] Fight      [3] Switch Pokemon");
@@ -109,7 +124,6 @@ public class PokeBattle {
 
     public void fight() {
         clear();
-
         // player attacks
         int playerAttack = activePokemon.attack(opponentPokemon);
         System.out.printf("%s used %s\n", activePokemon.getName(), activePokemon.getAttack());
@@ -126,9 +140,9 @@ public class PokeBattle {
             pause(2_000);
             nextPokemon();
         }
-
-        // opponent attacks
-        opponentTurn();
+        else {
+            opponentTurn();
+        }
 
     }
 
@@ -189,8 +203,8 @@ public class PokeBattle {
 
     public void runAway() {
         clear();
-        System.out.println("GAME OVER!!!");
-        pause(2_000);
+        System.out.println("You live to challenge another day...");
+        pause(2_500);
 
     }
 
@@ -212,18 +226,25 @@ public class PokeBattle {
             }
         }
         if (allFainted) {
-            System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
-            pause(2_000);
-            blankLines(1);
-            fightOn();
+            if (surprise.getName().equals(activeOpponent.getName())) {  // true ending
+                System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
+                pause(2_000);
+                blankLines(1);
+                battleOver();
+            }
+            else {                                                      // goes to continue or give up
+                System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
+                pause(2_000);
+                blankLines(1);
+                fightOn();
+            }
         }
-
     }
 
     public void fightOn() { // ask the player if they want to continue fighting or give up.
         clear();
-        System.out.println("[1] Challenge the next Elite 4");
-        System.out.println("[2] Give up and continue the challenge another day");
+        System.out.println("[1] Step forward");
+        System.out.println("[2] Continue the challenge another day");
         String continuePrompt = prompter.prompt("What will you do? ", "1|2", "\nThis is not a valid option!\n");
         switch (Integer.parseInt(continuePrompt)) {
             case 1:
@@ -235,9 +256,11 @@ public class PokeBattle {
         }
     }
 
+    // TODO: fix this
     public void nextOpponent() {    // just for switching the opponents
         clear();
         boolean noPokemon = true;
+
         for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
             // check each elite 4 if they have pokemon alive
             boolean allFainted = true;
@@ -246,7 +269,7 @@ public class PokeBattle {
                     allFainted = false;
                     noPokemon = false;
                     activeOpponent = opponent.getValue();
-                    opponentPokemon = pokemon;
+                    opponentPokemon = activeOpponent.getPokemon().get(1);
                     System.out.printf("%s enters the arena!", activeOpponent.getName());
                     pause(2_000);
                     blankLines(1);
@@ -254,10 +277,8 @@ public class PokeBattle {
                     break;
                 }
             }
-            if (allFainted) {
-                noPokemon = true;
-//                pause(2_000);
-//                blankLines(1);
+            if (!allFainted) {
+                break;
             }
         }
         // fires when all the elite 4 are defeated
@@ -266,6 +287,11 @@ public class PokeBattle {
             pause(2_000);
             blankLines(1);
             thoseWhoFightFurther();
+        }
+        else if (noPokemon && (surprise.getPokemon().get(1).isFainted())) {
+            pause(2_000);
+            blankLines(1);
+            battleOver();
         }
     }
 
@@ -325,6 +351,7 @@ public class PokeBattle {
                 i--;
                 pause(2_000);
                 blankLines(1);
+                break;
             }
         }
     }
