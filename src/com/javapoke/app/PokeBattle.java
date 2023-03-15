@@ -5,6 +5,9 @@ import com.apps.util.Prompter;
 import com.javapoke.Pokemon;
 import com.javapoke.Trainer;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import static com.apps.util.Console.*;
@@ -102,10 +105,16 @@ public class PokeBattle {
 
         blankLines(1);
 
-        System.out.println("[1] Fight      [3] Switch Pokemon");
-        System.out.println("[2] Use Item   [4] Run Away");
+        try {
+            Files.readAllLines(Path.of("images/battle_Prompt.txt"))
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         blankLines(1);
-        String battlePrompt = prompter.prompt("What will you do? ", "1|2|3|4", "\nThis is not a valid option!\n");
+        String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4",
+                "\n\t This is not a valid option!\n");
         switch (Integer.parseInt(battlePrompt)) {
             case 1:
                 fight();
