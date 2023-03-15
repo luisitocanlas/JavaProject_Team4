@@ -259,12 +259,6 @@ public class PokeBattleTest {
     }
 
     @Test
-    public void potion_check() {
-        System.out.printf("Potion: %8s\n", potion);
-        System.out.printf("Super potion: %2s", superPotion);
-    }
-
-    @Test
     public void trainerAccess_PokemonAttack() {
         System.out.println(activePokemon);
         System.out.println(player.getPokemon().get(1).getAttack());

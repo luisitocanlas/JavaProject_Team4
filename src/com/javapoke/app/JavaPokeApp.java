@@ -21,7 +21,7 @@ public class JavaPokeApp implements SplashApp {
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
     private final Introduction intro = new Introduction(prompter);
-    private final PokeBattle battle = new PokeBattle(prompter);
+//    private final PokeBattle battle = new PokeBattle(prompter);
     private Trainer player;
 
     /*
