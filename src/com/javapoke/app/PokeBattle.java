@@ -5,9 +5,6 @@ import com.apps.util.Prompter;
 import com.javapoke.Pokemon;
 import com.javapoke.Trainer;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 import static com.apps.util.Console.*;
@@ -38,48 +35,45 @@ public class PokeBattle {
      * Code within the dashes are used for method functionality, may keep some of them----------------------------------
      */
     // create pokemon and add the attacks
-    Pokemon charmander = new Pokemon("Charmander", 62, 1, "Ember");
-    Pokemon squirtle = new Pokemon("Squirtle", 60, 1, "Water ball");
-    Pokemon bulbasaur = new Pokemon("Bulbasaur", 60, 1, "Vine Whip");
-    Pokemon lapras = new Pokemon("Lapras", 60, 1, "Blizzard");
-    Pokemon machamp = new Pokemon("Machamp", 60, 1, "Body Slam");
-    Pokemon gengar = new Pokemon("Gengar", 60, 1, "Night Shade");
-    Pokemon dragonite = new Pokemon("Dragonite", 60, 1, "Hyper Beam");
-    Pokemon mewtwo = new Pokemon("Mewtwo", 60, 1, "Psychic");
+    Pokemon charmander = new Pokemon("Charmander", 62, 5, "Ember");
+    Pokemon squirtle = new Pokemon("Squirtle", 60, 5, "Water ball");
+    Pokemon bulbasaur = new Pokemon("Bulbasaur", 60, 5, "Vine Whip");
+    Pokemon lapras = new Pokemon("Lapras", 60, 5, "Blizzard");
+    Pokemon machamp = new Pokemon("Machamp", 60, 5, "Body Slam");
+    Pokemon gengar = new Pokemon("Gengar", 60, 5, "Night Shade");
+    Pokemon dragonite = new Pokemon("Dragonite", 60, 5, "Hyper Beam");
+    Pokemon mewtwo = new Pokemon("Mewtwo", 60, 5, "Psychic");
 
-    // create player and opponents
-    Trainer elite1 = new Trainer("Lorelei", Map.of(1,lapras, 2,charmander, 3,squirtle, 4,bulbasaur));
-    Trainer elite2 = new Trainer("Bruno", Map.of(1,machamp, 2,charmander, 3,squirtle, 4,bulbasaur));
-    Trainer elite3 = new Trainer("Agatha", Map.of(1,gengar, 2,charmander, 3,squirtle, 4,bulbasaur));
-    Trainer elite4 = new Trainer("Lance", Map.of(1,dragonite, 2,charmander, 3,squirtle, 4,bulbasaur));
-    Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1,mewtwo, 2,charmander, 3,squirtle, 4,bulbasaur));
+    // load opponents
+    Trainer elite1 = new Trainer("Lorelei", Map.of(1, lapras, 2, charmander, 3, squirtle, 4, bulbasaur));
+    Trainer elite2 = new Trainer("Bruno", Map.of(1, machamp, 2, charmander, 3, squirtle, 4, bulbasaur));
+    Trainer elite3 = new Trainer("Agatha", Map.of(1, gengar, 2, charmander, 3, squirtle, 4, bulbasaur));
+    Trainer elite4 = new Trainer("Lance", Map.of(1, dragonite, 2, charmander, 3, squirtle, 4, bulbasaur));
+    Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo, 2, charmander, 3, squirtle, 4, bulbasaur));
     //------------------------------------------------------------------------------------------------------------------
 
     /*
      * Containers-------------------------------------------------------------------------------------------------------
      */
-    // TODO: return activePokemon to container outside of the methods
-    // TODO: separate the surprise trainer from the opponents and have a method to call when all the elite 4 are defeated
     // list of opponents to go through, data will be from csv
-    Map<Integer, Trainer> opponents = Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4);
+    Map<Integer, Trainer> opponents = Map.of(1, elite1, 2, elite2, 3, elite3, 4, elite4);
+//    TreeMap<Integer, Trainer> opponents = (TreeMap<Integer, Trainer>) Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4);
 
     // container for active opponent, and their active pokemon, will initialize for the first opponent
     Trainer activeOpponent = elite1;
     Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
 
-
-
     /*
      * Main methods-----------------------------------------------------------------------------------------------------
      */
     // this method is for getting the data from the prompts and storing them in the containers
-    public Trainer startPokeBattle(Trainer player) {
+    public void startPokeBattle(Trainer player) {
         trainer = player;
         // container for the active pokemon for the current battle, should be getting from user
         activePokemon = trainer.getPokemon().get(1);
         // go to battle!
         battle();
-        return trainer;
+//        return trainer;
     }
 
     // create a method for the battle
@@ -123,21 +117,8 @@ public class PokeBattle {
         blankLines(1);
         pause(2_000);
 
-        // TODO: there should be a check here for HP if you felled the opponent because fainted pokemon don't attack
-        
-        // opponent attacks,TODO: maybe put this in an if else when opponent doesn't faint from our attack
-        opponentTurn();
-
-        // check for hit points for both sides
-        if (activePokemon.getHitPoints() <= 0) {        // if your pokemon fainted, automatically call switch pokemon
-            System.out.printf("%s fainted from battle.\n", activePokemon.getName());
-            blankLines(1);
-            activePokemon.setFainted(true);
-            inBattle = false;
-            pause(2_000);
-            switchPokemon();
-        }
-        else if (opponentPokemon.getHitPoints() <= 0) { // if your opponent's pokemon fainted
+        // checks if your opponents hit points
+        if (opponentPokemon.getHitPoints() <= 0) {
             System.out.printf("%s's %s fainted from battle.\n", activeOpponent.getName(), opponentPokemon.getName());
             blankLines(1);
             opponentPokemon.setFainted(true);
@@ -145,8 +126,10 @@ public class PokeBattle {
             pause(2_000);
             nextPokemon();
         }
-        //end of turn
-        battle();
+
+        // opponent attacks
+        opponentTurn();
+
     }
 
     public void useItem() {
@@ -163,18 +146,15 @@ public class PokeBattle {
             System.out.printf("You used Potion! Potion remaining: %s\n", potion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
             blankLines(1);
-        }
-        else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
+        } else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
             superPotion -= 1;
             activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
             System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
             blankLines(1);
-        }
-        else if (Integer.parseInt(prompt) == 3) {
+        } else if (Integer.parseInt(prompt) == 3) {
             battle();
-        }
-        else if (potion == 0 && superPotion == 0) {
+        } else if (potion == 0 && superPotion == 0) {
             System.out.println("You have ran out of potions!\n");
             blankLines(1);
         }
@@ -209,15 +189,14 @@ public class PokeBattle {
 
     public void runAway() {
         clear();
-        // TODO: go straight to game over, maybe say something cheeky
         System.out.println("GAME OVER!!!");
         pause(2_000);
+
     }
 
     /*
      * Minor methods----------------------------------------------------------------------------------------------------
      */
-    // TODO: it's not ending when all fainted and just looping, change to while loop
     public void nextPokemon() {     // just for the current opponent's pokemon
         clear();
         boolean allFainted = true;
@@ -228,23 +207,39 @@ public class PokeBattle {
                 System.out.printf("%s selected %s.\n", activeOpponent.getName(), opponentPokemon.getName());
                 pause(2_000);
                 blankLines(1);
+                battle();
                 break;
             }
         }
         if (allFainted) {
-            System.out.printf("You defeated %s!", activeOpponent.getName());
+            System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
             pause(2_000);
             blankLines(1);
-            runAway();
-//            nextOpponent();
+            fightOn();
+        }
+
+    }
+
+    public void fightOn() { // ask the player if they want to continue fighting or give up.
+        clear();
+        System.out.println("[1] Challenge the next Elite 4");
+        System.out.println("[2] Give up and continue the challenge another day");
+        String continuePrompt = prompter.prompt("What will you do? ", "1|2", "\nThis is not a valid option!\n");
+        switch (Integer.parseInt(continuePrompt)) {
+            case 1:
+                nextOpponent();
+                break;
+            case 2:
+                runAway();
+                break;
         }
     }
 
-    // TODO: it's not switching to the next opponent, might change to a while loop
     public void nextOpponent() {    // just for switching the opponents
         clear();
         boolean noPokemon = true;
-        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()){
+        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
+            // check each elite 4 if they have pokemon alive
             boolean allFainted = true;
             for (Pokemon pokemon : opponent.getValue().getPokemon().values()) {
                 if (!pokemon.isFainted()) {
@@ -252,21 +247,42 @@ public class PokeBattle {
                     noPokemon = false;
                     activeOpponent = opponent.getValue();
                     opponentPokemon = pokemon;
+                    System.out.printf("%s enters the arena!", activeOpponent.getName());
+                    pause(2_000);
+                    blankLines(1);
+                    battle();
                     break;
                 }
             }
             if (allFainted) {
                 noPokemon = true;
-                System.out.println("You defeated the Elite 4 and the surprise champion!\n");
-                blankLines(1);
-//                runAway();
+//                pause(2_000);
+//                blankLines(1);
             }
         }
+        // fires when all the elite 4 are defeated
         if (noPokemon) {
-            System.out.println("You defeated the Elite 4 and the surprise champion!\n");
+            System.out.println("Congratulations!!! You defeated the Elite 4!\n");
+            pause(2_000);
             blankLines(1);
-            runAway();
+            thoseWhoFightFurther();
         }
+    }
+
+    public void thoseWhoFightFurther() {
+        System.out.println("But suddenly you hear a voice...");
+        pause(2_000);
+        System.out.println("What's this?");
+        pause(2_000);
+        System.out.println("A real challenge?");
+        pause(2_000);
+        System.out.println("The current champion enters the stage");
+        pause(2_000);
+        activeOpponent = surprise;
+        opponentPokemon = surprise.getPokemon().get(1);
+        System.out.printf("%s approaches you.\n", activeOpponent.getName());
+        pause(1_000);
+        battle();
     }
 
     //should go to game over when all of your pokemon are dead
@@ -304,8 +320,7 @@ public class PokeBattle {
                 pause(2_000);
                 blankLines(1);
                 break;
-            }
-            else if (selectedPokemon.isFainted()) {
+            } else if (selectedPokemon.isFainted()) {
                 System.out.println("Cannot select pokemon\n");
                 i--;
                 pause(2_000);
@@ -320,5 +335,14 @@ public class PokeBattle {
         System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
         Console.blankLines(1);
         pause(2_000);
+
+        if (activePokemon.getHitPoints() <= 0) {        // if your pokemon fainted, automatically call switch pokemon
+            System.out.printf("%s fainted from battle.\n", activePokemon.getName());
+            blankLines(1);
+            activePokemon.setFainted(true);
+            inBattle = false;
+            pause(2_000);
+            switchPokemon();
+        }
     }
 }

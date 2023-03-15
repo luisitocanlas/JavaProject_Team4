@@ -116,22 +116,18 @@ public class PokeBattleTest {
         for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
             if (!pokemon.isFainted()) {
                 allFainted = false;
-                break;
-            }
-        }
-        if (allFainted) {
-            System.out.println("All of your Pokemon fainted from battle");
-            pause(2_000);
-            blankLines(1);
-//            nextOpponent();
-        }
-        for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
-            if (!pokemon.isFainted()) {
                 opponentPokemon = pokemon;
                 System.out.printf("%s selected %s.\n", activeOpponent.getName(), opponentPokemon.getName());
                 pause(2_000);
                 blankLines(1);
+//                battle();
             }
+        }
+        if (allFainted) {
+            System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
+            pause(2_000);
+            blankLines(1);
+//            forThoseWhoFight();
         }
     }
 
@@ -159,6 +155,10 @@ public class PokeBattleTest {
     public void battle_choices() {
         System.out.println(" [1] Fight      [3] Switch Pokemon");
         System.out.println(" [2] Use Item   [4] Run Away");
+        blankLines(2);
+
+        System.out.println("[1] Challenge the next Elite 4");
+        System.out.println("[2] Give up and continue the challenge another day");
     }
 
     @Test
