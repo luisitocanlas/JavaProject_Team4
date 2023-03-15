@@ -11,27 +11,28 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static com.apps.util.Console.*;
-
 import static com.javapoke.Potion.*;
 
 
 public class PokeBattle {
-JavaPokeApp_Jorge
-    private final Prompter prompter;
-    boolean inBattle = false;               // will be a check when switching pokemon
-    Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
-
-    // Potion Counter
-    int potion = 10;
-    int superPotion = 5;
-
     // fields
-    private static final Prompter prompter= new Prompter(new Scanner(System.in));
+    private Prompter prompter= new Prompter(new Scanner(System.in));
     private static boolean inBattle = false;
     private static int potion = 10;
     private static int superPotion = 5;
     private Pokemon activePokemon;
-main
+    private Trainer trainer;
+
+    Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
+
+    // ctor
+//    public PokeBattle(Prompter prompter) {
+//        this.prompter = prompter;
+//    }
+
+    public static PokeBattle getInstance() {
+        return new PokeBattle();
+    }
 
     /*
      * Code within the dashes are used for method functionality, may keep some of them----------------------------------
@@ -66,15 +67,7 @@ main
     Trainer activeOpponent = elite1;
     Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
 
-JavaPokeApp_Jorge
-    // ctor
-    public PokeBattle(Prompter prompter) {
-        this.prompter = prompter;
 
-    public static PokeBattle getInstance() {
-        return new PokeBattle();
-main
-    }
 
     /*
      * Main methods-----------------------------------------------------------------------------------------------------
@@ -162,7 +155,7 @@ main
         System.out.printf("[1] Potion: %8s\n", potion);
         System.out.printf("[2] Super potion: %2s\n", superPotion);
         System.out.println("[3] Back\n");
-        String prompt = prompter.prompt("Select [1] for Potion or [2] for Super Potion: ", "1|2|3",
+        String prompt = prompter.prompt("Pick your poison: ", "1|2|3",
                 "\nThis is not a valid option!\n");
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
             potion -= 1;
