@@ -16,6 +16,8 @@ public class JavaPokeApp implements SplashApp {
     private static final int maxNumOfPokemon = 4;
     private static final String pokemonData = "data/Pokemon Chart.csv";
 
+    private final PokeBattle pokeBattle = PokeBattle.getInstance();
+
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
     private final Introduction intro = new Introduction(prompter);
@@ -35,7 +37,7 @@ public class JavaPokeApp implements SplashApp {
         intro.startUp();    // Completed
         chooseTrainer();    // Completed
         choosePokemon();    // Completed
-        //startGame();
+        startGame(player);
         gameOver();
     }
 
@@ -51,8 +53,9 @@ public class JavaPokeApp implements SplashApp {
         }
     }
 
-    private void startGame() {
+    private void startGame(Trainer player) {
         clear();
+        pokeBattle.startPokeBattle(player);
     }
 
     /*
@@ -93,11 +96,11 @@ public class JavaPokeApp implements SplashApp {
 
             for (String line : lines) {
                 String[] tokens = line.split(",");
-                if (tokens.length != 4) {
+                if (tokens.length != 5) {
                     throw new RuntimeException("Invalid Line in CSV file " + line);
                 }
                 pokemonMap.put(Integer.valueOf(tokens[0]),
-                        new Pokemon(tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])));
+                        new Pokemon(tokens[1], Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]), tokens[4]));
             }
         } catch (IOException e) {
             e.printStackTrace();

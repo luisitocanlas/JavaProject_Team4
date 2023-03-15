@@ -1,8 +1,8 @@
 package com.javapoke;
 
 public enum Potion {
-    POTION(25),
-    SUPER_POTION(50);
+    POTION(50),
+    SUPER_POTION(100);
 
     private final int value;
 
