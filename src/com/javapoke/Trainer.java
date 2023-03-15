@@ -11,6 +11,9 @@ public class Trainer {
     private Map<Integer, Pokemon> pokemon;
 
     //constructors
+    public Trainer() {
+    }
+
     public Trainer(String name) {
         this.name = name;
     }
