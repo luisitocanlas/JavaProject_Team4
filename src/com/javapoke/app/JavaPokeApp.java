@@ -16,12 +16,12 @@ public class JavaPokeApp implements SplashApp {
     private static final int maxNumOfPokemon = 4;
     private static final String pokemonData = "data/Pokemon Chart.csv";
 
-    private final PokeBattle pokeBattle = PokeBattle.getInstance();
+//    private final PokeBattle pokeBattle = PokeBattle.getInstance(prompter);
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
     private final Introduction intro = new Introduction(prompter);
-//    private final PokeBattle battle = new PokeBattle(prompter);
+    private final PokeBattle pokeBattle = new PokeBattle(prompter);
     private Trainer player;
 
     /*

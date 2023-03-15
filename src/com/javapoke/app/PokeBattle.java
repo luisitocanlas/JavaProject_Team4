@@ -16,7 +16,7 @@ import static com.javapoke.Potion.*;
 
 public class PokeBattle {
     // fields
-    private Prompter prompter= new Prompter(new Scanner(System.in));
+    private final Prompter prompter;
     private static boolean inBattle = false;
     private static int potion = 10;
     private static int superPotion = 5;
@@ -26,13 +26,13 @@ public class PokeBattle {
     Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
 
     // ctor
-//    public PokeBattle(Prompter prompter) {
-//        this.prompter = prompter;
-//    }
-
-    public static PokeBattle getInstance() {
-        return new PokeBattle();
+    public PokeBattle(Prompter prompter) {
+        this.prompter = prompter;
     }
+
+//    public PokeBattle getInstance() {
+//        return new PokeBattle(prompter);
+//    }
 
     /*
      * Code within the dashes are used for method functionality, may keep some of them----------------------------------
