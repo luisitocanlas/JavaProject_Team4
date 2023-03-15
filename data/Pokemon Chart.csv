@@ -1,10 +1,10 @@
-1,Eevee,60,145
-2,Blastoise,62,169
-3,Charizard,62,168
-4,Venusaur,62,171
-5,Pikachu,61,152
-6,Snorlax,60,180
-7,Alakazam,60,145
-8,Gyarados,61,186
-9,Machamp,61,180
-10,Gengar,62,165
+1,Eevee,60,145,Bite
+2,Blastoise,62,169,Hydro Pump
+3,Charizard,62,168,Flamethrower
+4,Venusaur,62,171,Razor Leaf
+5,Pikachu,61,152,Thunder
+6,Snorlax,60,180,Body Slam
+7,Alakazam,60,145,Psychic
+8,Gyarados,61,186,Dragon Rage
+9,Machamp,61,180,Seismic Toss
+10,Gengar,62,165,Night Shade

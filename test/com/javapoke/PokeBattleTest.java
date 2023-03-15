@@ -6,9 +6,10 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static com.apps.util.Console.clear;
+import static com.apps.util.Console.*;
 import static com.javapoke.Potion.*;
 
+// TODO: move to com.javapoke.app
 public class PokeBattleTest {
     // fixture
     private Prompter prompter;
@@ -29,7 +30,7 @@ public class PokeBattleTest {
     Pokemon mewtwo;
     Map<Integer, Pokemon> pokeBelt;
     Map<Integer, Pokemon> pokeBelt2;
-    List<Trainer> opponents;
+    Map<Integer, Trainer> opponents;
     Trainer activeOpponent;
     Pokemon opponentPokemon;
 
@@ -61,22 +62,77 @@ public class PokeBattleTest {
 
         // TODO: implement the option to choose from a list of names or type in their own name
         player = new Trainer("Ash", pokeBelt);              // will be replaced by the chooserTrainer()
-        elite1 = new Trainer("Lorelei", Map.of(1, lapras));
-        elite2 = new Trainer("Bruno", Map.of(1,machamp));
-        elite3 = new Trainer("Agatha", Map.of(1,gengar));
-        elite4 = new Trainer("Lance", Map.of(1,dragonite));
-        surprise = new Trainer("THE Joshua BLOCH", Map.of(1,mewtwo));
+        elite1 = new Trainer("Lorelei", Map.of(1,lapras, 2,charmander, 3,squirtle, 4,bulbasaur));
+        elite2 = new Trainer("Bruno", Map.of(1,machamp, 2,charmander, 3,squirtle, 4,bulbasaur));
+        elite3 = new Trainer("Agatha", Map.of(1,gengar, 2,charmander, 3,squirtle, 4,bulbasaur));
+        elite4 = new Trainer("Lance", Map.of(1,dragonite, 2,charmander, 3,squirtle, 4,bulbasaur));
+        surprise = new Trainer("THE Joshua BLOCH", Map.of(1,mewtwo, 2,charmander, 3,squirtle, 4,bulbasaur));
 
         // TODO: implement something that tells you which is the current active pokemon
         // container for the active pokemon for the current battle
         activePokemon = player.getPokemon().get(1);
 
-        // list of opponents to go through
-        opponents = new ArrayList<>(List.of(elite1, elite2, elite3, elite4, surprise));
+        // list of opponents to go through, data will be from csv
+        opponents = Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4, 5,surprise);
 
-        // container for active opponent, maybe change this to the opponent's pokemon instead of the trainer
+        // container for active opponent, and their active pokemon, will initialize for the first opponent
         activeOpponent = elite1;
         opponentPokemon = activeOpponent.getPokemon().get(1);
+    }
+
+    @Test
+    public void opponentsTrainerCheck() {
+        clear();
+        boolean noPokemon = true;
+        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()){
+            boolean allFainted = true;
+            for (Pokemon pokemon : opponent.getValue().getPokemon().values()) {
+                if (!pokemon.isFainted()) {
+                    allFainted = false;
+                    noPokemon = false;
+                    activeOpponent = opponent.getValue();
+                    opponentPokemon = pokemon;
+                    break;
+                }
+            }
+            if (allFainted) {
+                noPokemon = true;
+                System.out.println("You defeated the Elite 4 and the surprise champion!\n");
+                blankLines(1);
+//                runAway();
+            }
+        }
+        if (noPokemon) {
+            System.out.println("You defeated the Elite 4 and the surprise champion!\n");
+            blankLines(1);
+//            runAway();
+        }
+    }
+
+    @Test
+    public void opponentsPokemonCheck() {
+        clear();
+        boolean allFainted = true;
+        for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
+            if (!pokemon.isFainted()) {
+                allFainted = false;
+                break;
+            }
+        }
+        if (allFainted) {
+            System.out.println("All of your Pokemon fainted from battle");
+            pause(2_000);
+            blankLines(1);
+//            nextOpponent();
+        }
+        for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
+            if (!pokemon.isFainted()) {
+                opponentPokemon = pokemon;
+                System.out.printf("%s selected %s.\n", activeOpponent.getName(), opponentPokemon.getName());
+                pause(2_000);
+                blankLines(1);
+            }
+        }
     }
 
     @Test
@@ -97,6 +153,12 @@ public class PokeBattleTest {
                 System.out.println("Run away");
                 break;
         }
+    }
+
+    @Test
+    public void battle_choices() {
+        System.out.println(" [1] Fight      [3] Switch Pokemon");
+        System.out.println(" [2] Use Item   [4] Run Away");
     }
 
     @Test
@@ -152,10 +214,10 @@ public class PokeBattleTest {
     }
 
     private void pokeSwitch() {
-        System.out.println(" Option \tPokemon    \tLevel \tHP  \tisFainted");
-        System.out.println(" ====== \t========== \t===== \t=== \t=========");
+        System.out.println(" Option     Pokemon       Level    HP    isFainted");
+        System.out.println("  ======   ============    =====   ====   =========");
         for (Map.Entry<Integer, Pokemon> pokemon : player.getPokemon().entrySet()) {
-            System.out.printf("   %s: \t\t%s \t %s \t%s \t%s\n"
+            System.out.printf("%5s:      %-10s      %s      %-5s   %s\n"
                     , pokemon.getKey(), pokemon.getValue().getName()
                     , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints(), pokemon.getValue().isFainted());
         }
@@ -194,6 +256,12 @@ public class PokeBattleTest {
         else if (potion == 0 && superPotion == 0) {
             System.out.println("You have ran out of potions!");
         }
+    }
+
+    @Test
+    public void potion_check() {
+        System.out.printf("Potion: %8s\n", potion);
+        System.out.printf("Super potion: %2s", superPotion);
     }
 
     @Test
