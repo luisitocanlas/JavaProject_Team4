@@ -1,7 +1,5 @@
 package com.javapoke;
 
-import java.util.HashMap;
-
 public class Pokemon {
     // fields
     private final String name;
@@ -9,20 +7,28 @@ public class Pokemon {
     private int hitPoints;
     private boolean isFainted = false;
     private String attack;     // [ attackName : attack damage ], might have to change this to just a name
-                                        // attack damage will be handled by a number randomizer
+    private String art;                       // attack damage will be handled by a number randomizer
 
+    // constructors
     public Pokemon(String name, int level, int hitPoints){
         this.name = name;
         this.level = level;
         this.hitPoints = hitPoints;
     }
 
-    // constructors
     public Pokemon(String name, int level, int hitPoints, String attack) {
         this.name = name;
         this.level = level;
         this.hitPoints = hitPoints;
         this.attack = attack;
+    }
+
+    public Pokemon(String name, int level, int hitPoints, String attack, String art) {
+        this.name = name;
+        this.level = level;
+        this.hitPoints = hitPoints;
+        this.attack = attack;
+        this.art = art;
     }
 
     /*
@@ -68,6 +74,14 @@ public class Pokemon {
         return attack;
     }
 
+    public String getArt() {
+        return art;
+    }
+
+    public void setArt(String art) {
+        this.art = art;
+    }
+
     @Override
     public String toString() {
         return "Pokemon{" +
@@ -76,6 +90,6 @@ public class Pokemon {
                 ", hitPoints=" + hitPoints +
                 ", isFainted=" + isFainted +
                 ", attack=" + attack +
-                '}';
+                ", art=" + art + '}';
     }
 }

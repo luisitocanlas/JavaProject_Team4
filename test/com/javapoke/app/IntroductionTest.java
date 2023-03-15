@@ -16,7 +16,7 @@ public class IntroductionTest {
     Prompter prompter;
 
     /*
-     * Ask Jay how we would test to see if the method printed for rules without using Mockito?
+     * Ask Jay how we would test to see if the method printed rules without using Mockito?
      */
     @Test
     public void welcomePrompt_shouldPrintUpperCaseY_whenGivenInputOfLowerCase() {

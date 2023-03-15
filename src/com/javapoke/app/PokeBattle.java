@@ -16,13 +16,22 @@ import static com.javapoke.Potion.*;
 
 
 public class PokeBattle {
+JavaPokeApp_Jorge
+    private final Prompter prompter;
+    boolean inBattle = false;               // will be a check when switching pokemon
+    Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
+
+    // Potion Counter
+    int potion = 10;
+    int superPotion = 5;
+
     // fields
     private static final Prompter prompter= new Prompter(new Scanner(System.in));
     private static boolean inBattle = false;
     private static int potion = 10;
     private static int superPotion = 5;
     private Pokemon activePokemon;
-    private Trainer trainer;
+main
 
     /*
      * Code within the dashes are used for method functionality, may keep some of them----------------------------------
@@ -57,8 +66,14 @@ public class PokeBattle {
     Trainer activeOpponent = elite1;
     Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
 
+JavaPokeApp_Jorge
+    // ctor
+    public PokeBattle(Prompter prompter) {
+        this.prompter = prompter;
+
     public static PokeBattle getInstance() {
         return new PokeBattle();
+main
     }
 
     /*
