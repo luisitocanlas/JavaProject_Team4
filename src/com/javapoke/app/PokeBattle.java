@@ -17,63 +17,37 @@ import static com.javapoke.Potion.*;
 
 public class PokeBattle {
     // fields
-    private final Prompter prompter;
     private static boolean inBattle = false;
     private static int potion = 10;
     private static int superPotion = 5;
+    private static int maxHP;
+
+    private final Prompter prompter;
     private Pokemon activePokemon;
     private Trainer trainer;
-
-    Map<Integer, Pokemon> pokeStorage;      // this will be connected to the player's selection
-
-    // ctor
-    public PokeBattle(Prompter prompter) {
-        this.prompter = prompter;
-    }
-
-//    public PokeBattle getInstance() {
-//        return new PokeBattle(prompter);
-//    }
-
-    /*
-     * Code within the dashes are used for method functionality, may keep some of them----------------------------------
-     */
-    // create pokemon and add the attacks
-    Pokemon charmander = new Pokemon("Charmander", 62, 5, "Ember");
-    Pokemon squirtle = new Pokemon("Squirtle", 60, 5, "Water ball");
-    Pokemon bulbasaur = new Pokemon("Bulbasaur", 60, 5, "Vine Whip");
-    Pokemon lapras = new Pokemon("Lapras", 60, 5, "Blizzard");
-    Pokemon machamp = new Pokemon("Machamp", 60, 5, "Body Slam");
-    Pokemon gengar = new Pokemon("Gengar", 60, 5, "Night Shade");
-    Pokemon dragonite = new Pokemon("Dragonite", 60, 5, "Hyper Beam");
-    Pokemon mewtwo = new Pokemon("Mewtwo", 60, 5, "Psychic");
-
-    //, 2, charmander, 3, squirtle, 4, bulbasaur
-
-    // load opponents
-    EliteTrainer lorelei = new EliteTrainer().loadLorelei();
-    Trainer elite2 = new Trainer("Bruno", Map.of(1, machamp));
-    Trainer elite3 = new Trainer("Agatha", Map.of(1, gengar));
-    Trainer elite4 = new Trainer("Lance", Map.of(1, dragonite));
-    Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo));
-    //------------------------------------------------------------------------------------------------------------------
-
-    /*
-     * Containers-------------------------------------------------------------------------------------------------------
-     */
-    // list of opponents to go through, data will be from csv
-    Map<Integer, Trainer> opponents = Map.of(1, lorelei, 2,elite2, 3,elite3, 4,elite4);
-//    TreeMap<Integer, Trainer> opponents = (TreeMap<Integer, Trainer>) Map.of(1,elite1, 2,elite2, 3,elite3, 4,elite4);
+    private final Pokemon mewtwo = new Pokemon("Mewtwo", 60, 255, "Psychic");
+    private final EliteTrainer lorelei = new EliteTrainer().loadLorelei();
+    private final EliteTrainer bruno = new EliteTrainer().loadBruno();
+    private final EliteTrainer agatha = new EliteTrainer().loadAgatha();
+    private final EliteTrainer lance = new EliteTrainer().loadLance();
+    private final Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo));
+    private final Map<Integer, Trainer> opponents = Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance);
+    private boolean gameOver = false;
 
     // container for active opponent, and their active pokemon, will initialize for the first opponent
-    Trainer activeOpponent = lorelei;
-    Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
+    private Trainer activeOpponent = lorelei;
+    private Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
+
+    // ctor
+    PokeBattle(Prompter prompter) {
+        this.prompter = prompter;
+    }
 
     /*
      * Main methods-----------------------------------------------------------------------------------------------------
      */
     // this method is for getting the data from the prompts and storing them in the containers
-    public void startPokeBattle(Trainer player) {
+    void startPokeBattle(Trainer player) {
         trainer = player;
         // container for the active pokemon for the current battle, should be getting from user
         activePokemon = trainer.getPokemon().get(1);
@@ -91,49 +65,50 @@ public class PokeBattle {
     }
 
     // create a method for the battle
-    public void battle() {
+    private void battle() {
         clear();
-        inBattle = true;
+        while (!gameOver) {
+            inBattle = true;
 
+            // show opponentPokemon details here
+            System.out.println(activeOpponent.getName());
+            System.out.printf("%-14s   HP: %s", opponentPokemon.getName(), opponentPokemon.getHitPoints());
+            // TODO showcase Pokemon Art
+            blankLines(2);
+            // show activePokemon details here
+            System.out.println(trainer.getName());
+            System.out.printf("%-14s   HP: %s ", activePokemon.getName(), activePokemon.getHitPoints());
 
-        // show opponentPokemon details here
-        System.out.println(activeOpponent.getName());
-        System.out.println(opponentPokemon.getName() + " " + opponentPokemon.getHitPoints());
-        // TODO showcase Pokemon Art
-        blankLines(1);
-        // show activePokemon details here
-        System.out.println(trainer.getName());
-        System.out.println(activePokemon.getName() + " " + activePokemon.getHitPoints());
+            blankLines(1);
 
-        blankLines(1);
+            try {
+                Files.readAllLines(Path.of("images/battle_Prompt.txt"))
+                        .forEach(System.out::println);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            Files.readAllLines(Path.of("images/battle_Prompt.txt"))
-                    .forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        blankLines(1);
-        String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4",
-                "\n\t This is not a valid option!\n");
-        switch (Integer.parseInt(battlePrompt)) {
-            case 1:
-                fight();
-                break;
-            case 2:
-                useItem();
-                break;
-            case 3:
-                switchPokemon();
-                break;
-            case 4:
-                runAway();
-                break;
+            blankLines(1);
+            String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4",
+                    "\n\t This is not a valid option!\n");
+            switch (Integer.parseInt(battlePrompt)) {
+                case 1:
+                    fight();
+                    break;
+                case 2:
+                    useItem();
+                    break;
+                case 3:
+                    switchPokemon();
+                    break;
+                case 4:
+                    runAway();
+                    break;
+            }
         }
     }
 
-    public void fight() {
+    private void fight() {
         clear();
         // player attacks
         int playerAttack = activePokemon.attack(opponentPokemon);
@@ -150,14 +125,13 @@ public class PokeBattle {
             inBattle = false;
             pause(2_000);
             nextPokemon();
-        }
-        else {
+        } else {
             opponentTurn();
         }
 
     }
 
-    public void useItem() {
+    private void useItem() {
         clear();
         // ask the player which potion to use, TODO: maybe switch this to case
         System.out.printf("[1] Potion: %8s\n", potion);
@@ -190,7 +164,7 @@ public class PokeBattle {
         battle();
     }
 
-    public void switchPokemon() {   // TODO: add an option to go back
+    private void switchPokemon() {   // TODO: add an option to go back
         clear();
         System.out.println("Choose a Pokemon.");
         blankLines(1);
@@ -212,18 +186,22 @@ public class PokeBattle {
         battle();
     }
 
-    public void runAway() {
+    private void runAway() {
         clear();
-        //TODO Create a banner for this
-        System.out.println("You live to challenge another day...");
+        try {
+            Files.readAllLines(Path.of("images/runAwayBanner.txt"))
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         pause(2_500);
-
+        gameOver = true;
     }
 
     /*
      * Minor methods----------------------------------------------------------------------------------------------------
      */
-    public void nextPokemon() {     // just for the current opponent's pokemon
+    private void nextPokemon() {     // just for the current opponent's pokemon
         clear();
         boolean allFainted = true;
         for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
@@ -243,8 +221,7 @@ public class PokeBattle {
                 pause(2_000);
                 blankLines(1);
                 battleOver();
-            }
-            else {                                                      // goes to continue or give up
+            } else {                                                      // goes to continue or give up
                 System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
                 pause(2_000);
                 blankLines(1);
@@ -253,11 +230,11 @@ public class PokeBattle {
         }
     }
 
-    public void fightOn() { // ask the player if they want to continue fighting or give up.
+    private void fightOn() { // ask the player if they want to continue fighting or give up.
         clear();
         try {
             Files.readAllLines(Path.of("images/continue_Prompt.txt"))
-                            .forEach(System.out::println);
+                    .forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -273,7 +250,7 @@ public class PokeBattle {
         }
     }
 
-    public void nextOpponent() {    // just for switching the opponents
+    private void nextOpponent() {    // just for switching the opponents
         clear();
         boolean hasNoPokemon = true;
 
@@ -311,7 +288,7 @@ public class PokeBattle {
         }
     }
 
-    public void thoseWhoFightFurther() {
+    private void thoseWhoFightFurther() {
         System.out.println("But suddenly you hear a voice...");
         pause(2_000);
         System.out.println("What's this?");
@@ -330,12 +307,14 @@ public class PokeBattle {
     //should go to game over when all of your pokemon are dead
     private void pokeSwitch() {
         clear();
-        System.out.println(" Option     Pokemon       Level    HP    isFainted");
+
+        System.out.println("  Option     Pokemon       Level    HP    isFainted");
         System.out.println("  ======   ============    =====   ====   =========");
         for (Map.Entry<Integer, Pokemon> pokemon : trainer.getPokemon().entrySet()) {
-            System.out.printf("%5s:      %-10s      %s      %-5s   %s\n"
-                    , pokemon.getKey(), pokemon.getValue().getName()
-                    , pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints(), pokemon.getValue().isFainted());
+            System.out.printf("%5s:      %-10s      %s      %-5s   %s\n",
+                    pokemon.getKey(), pokemon.getValue().getName(),
+                    pokemon.getValue().getLevel(), pokemon.getValue().getHitPoints(),
+                    pokemon.getValue().isFainted());
         }
 
         boolean allFainted = true;
@@ -352,22 +331,24 @@ public class PokeBattle {
             blankLines(1);
             runAway();
         }
-
-        for (int i = 0; i < trainer.getPokemon().size(); i++) {
-            String pokemonPrompt = prompter.prompt("Select pokemon #: ", "1|2|3|4", "\nThis is not a valid option!\n");
-            Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
-            if (!selectedPokemon.isFainted()) {
-                activePokemon = selectedPokemon;
-                System.out.printf("You selected %s.\n", activePokemon.getName());
-                pause(2_000);
-                blankLines(1);
-                break;
-            } else if (selectedPokemon.isFainted()) {
-                System.out.println("Cannot select pokemon\n");
-                i--;
-                pause(2_000);
-                blankLines(1);
-                break;
+        else {
+            for (int i = 0; i < trainer.getPokemon().size(); i++) {
+                String pokemonPrompt = prompter.prompt("Select pokemon #: ", "1|2|3|4", "\nThis is not a valid option!\n");
+                Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
+                if (!selectedPokemon.isFainted()) {
+                    activePokemon = selectedPokemon;
+                    maxHP = activePokemon.getHitPoints();   // sets max hp for the selected pokemon
+                    System.out.printf("You selected %s.\n", activePokemon.getName());
+                    pause(2_000);
+                    blankLines(1);
+                    battle();
+                    break;
+                } else {
+                    i--;
+                    System.out.println("Cannot select pokemon\n");
+                    pause(2_000);
+                    blankLines(1);
+                }
             }
         }
     }
@@ -379,7 +360,7 @@ public class PokeBattle {
         Console.blankLines(1);
         pause(2_000);
 
-        if (activePokemon.getHitPoints() <= 0) {        // if your pokemon fainted, automatically call switch pokemon
+        if (activePokemon.getHitPoints() <= 0) {  // if your pokemon fainted, automatically call switch pokemon
             System.out.printf("%s fainted from battle.\n", activePokemon.getName());
             blankLines(1);
             activePokemon.setFainted(true);
