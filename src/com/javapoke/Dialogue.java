@@ -4,7 +4,7 @@ import static com.apps.util.Console.*;
 
 class Dialogue {
 
-    public void loreleiDialogue() {
+    void loreleiDialogue() {
         blankLines(1);
         System.out.println("Welcome to Pokemon League!\n");
         pause(2_000);
@@ -17,7 +17,7 @@ class Dialogue {
         clear();
     }
 
-    public void brunoDialogue() {
+    void brunoDialogue() {
         blankLines(1);
         System.out.println("I am Bruno of the Elite Four!\n");
         pause(2_000);
@@ -32,7 +32,7 @@ class Dialogue {
         clear();
     }
 
-    public void agathaDialogue() {
+    void agathaDialogue() {
         blankLines(1);
         System.out.println("I am Agatha of the Elite Four!\n");
         pause(2_000);
@@ -47,7 +47,7 @@ class Dialogue {
         clear();
     }
 
-    public void lanceDialogue() {
+    void lanceDialogue() {
         blankLines(1);
         System.out.println("Ah! I heard about you\n");
         pause(2_000);
@@ -66,7 +66,7 @@ class Dialogue {
         clear();
     }
 
-    public void joshDialogue() {
+    void joshDialogue() {
         blankLines(1);
         System.out.println("Hey! I was looking forward to seeing you!\n");
         pause(2_000);
@@ -85,7 +85,7 @@ class Dialogue {
         clear();
     }
 
-    public void surpriseDialogue() {
+    void surpriseDialogue() {
         blankLines(1);
         System.out.println("But suddenly you hear a voice...\n");
         pause(2_000);

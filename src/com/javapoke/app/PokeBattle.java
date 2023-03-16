@@ -16,10 +16,6 @@ import static com.javapoke.Potion.*;
 
 
 public class PokeBattle {
-    private static boolean inBattle = false;
-    private static int potion = 10;
-    private static int superPotion = 5;
-    private static int maxHP;
 
     private final Prompter prompter;
     private final Map<String, Integer> maxHpContainer = new TreeMap<>();
@@ -30,9 +26,13 @@ public class PokeBattle {
     private final Map<Integer, Trainer> opponents = new TreeMap<>(Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance));
     private final Trainer surprise = surprise();
 
+    private int potion = 10;
+    private int superPotion = 5;
+    private int maxHP;
+    private boolean inBattle = false;
     private Pokemon activePokemon;
     private Trainer trainer;
-    private Trainer activeOpponent = lorelei;
+    private Trainer activeOpponent = opponents.get(1);
     private boolean isGameOver = false;
     private Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
 
