@@ -266,7 +266,7 @@ public class PokeBattle {
         }
     }
 
-    private void nextOpponent() {    // just for switching the opponents
+    private void nextOpponent() {    // just for switching the opponents' pokemon
         clear();
         boolean hasNoPokemon = true;
 
@@ -306,7 +306,7 @@ public class PokeBattle {
         }
     }
 
-    private void thoseWhoFightFurther() {
+    private void thoseWhoFightFurther() {   // fires when you defeat the elite four and continue with the game
         activeOpponent.loadDialogue("Surprise");
         activeOpponent = surprise;
         opponentPokemon = surprise.getPokemon().get(1);
@@ -320,7 +320,7 @@ public class PokeBattle {
         battle();
     }
 
-    private Trainer surprise() {
+    private Trainer surprise() {    // the actual champion
         Trainer josh = null;
         try {
             Pokemon mewtwo = new Pokemon("Mewtwo", 65, 250, "Psychic",
