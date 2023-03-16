@@ -84,7 +84,7 @@ public class Pokemon {
     }
 
     //inner classes
-    static class Attack {
+    private static class Attack {
 
         private static int getDamage() {
             Random random = new Random();

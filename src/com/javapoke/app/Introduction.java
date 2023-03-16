@@ -59,6 +59,7 @@ class Introduction {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        pause(25_000); // 25 secs should be enough for the reader to read all rules. Ask lui
+        prompter.prompt("\n\t\t\t\t Enter [Y]es to Continue: ", "Y|y",
+                "\n\t\t\t\t This is not a valid option!\n");
     }
 }

@@ -185,7 +185,7 @@ public class PokeBattle {
         } else if (potion == 0 && superPotion == 0) {
             System.out.println("\nYou have ran out of potions!\n");
         }
-        pause(2_500);
+        pause(3_500);
         // go back to main battle options
         battle();
     }
