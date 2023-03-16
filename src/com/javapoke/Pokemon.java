@@ -12,21 +12,24 @@ public class Pokemon {
     private String art;
 
     // constructors
-    public Pokemon(String name, int level, int hitPoints, String attack) {
+    public Pokemon(String name, int level, int hitPoints, String attack)
+    throws IllegalArgumentException{
         this.name = name;
         this.level = level;
-        this.hitPoints = hitPoints;
+        setHitPoints(hitPoints);
         this.attack = attack;
     }
 
-    public Pokemon(String name, int level, int hitPoints, String attack, String art) {
+    public Pokemon(String name, int level, int hitPoints, String attack, String art)
+    throws IllegalArgumentException{
         this.name = name;
         this.level = level;
-        this.hitPoints = hitPoints;
+        setHitPoints(hitPoints);
         this.attack = attack;
         this.art = art;
     }
 
+    // business methods
     public int attack(Pokemon other) {
         int damage = Attack.getDamage();
         other.takeDamage(damage);
@@ -50,8 +53,12 @@ public class Pokemon {
         return hitPoints;
     }
 
-    public void setHitPoints(int hitPoints) {
-        this.hitPoints = hitPoints;
+    public void setHitPoints(int hitPoints) throws IllegalArgumentException {
+        if (hitPoints < 0) {
+            throw new IllegalArgumentException ("Hit points must be greater than 0. Input: " + hitPoints);
+        } else {
+            this.hitPoints = hitPoints;
+        }
     }
 
     public boolean isFainted() {

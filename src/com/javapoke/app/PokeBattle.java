@@ -50,7 +50,7 @@ public class PokeBattle {
         trainer = player;
         // container for the active pokemon for the current battle, should be getting from user
         activePokemon = trainer.getPokemon().get(1);
-        setMaxHP(); // sets maxHP used for healing your pokemon
+        setMaxHP(); // sets maxHP used for healing your Pokemon
 
         // go to battle!
         showTrainer();
@@ -62,9 +62,12 @@ public class PokeBattle {
 
     private void battleOver() {
         isGameOver = true;
+        pause(3_000);
+        clear();
         try {
             Files.readAllLines(Path.of("images/battleOver_Banner.txt")).forEach(System.out::println);
             pause(3_500);
+            clear();
             Files.readAllLines(Path.of("images/congratulations_banner.txt")).forEach(System.out::println);
             pause(3_500);
         } catch (IOException e) {
@@ -270,7 +273,6 @@ public class PokeBattle {
                     opponentPokemon = activeOpponent.getPokemon().get(1);
                     showTrainer();
                     showOpponentPokemon();
-                    // TODO: place the image of the trainer here and a clear after pause
                     pause(2_000);
                     blankLines(1);
                     battle();
@@ -297,24 +299,13 @@ public class PokeBattle {
     }
 
     private void thoseWhoFightFurther() {
-        System.out.println("But suddenly you hear a voice...\n");
-        pause(2_000);
-        System.out.println("What's this?\n");
-        pause(2_000);
-        System.out.println("A real challenge?\n");
-        pause(2_000);
-        System.out.println("The current champion enters the stage\n");
-        pause(2_000);
+        activeOpponent.loadDialogue("Surprise");
         activeOpponent = surprise;
         opponentPokemon = surprise.getPokemon().get(1);
-        System.out.printf("%s approaches you.", activeOpponent.getName());
+        clear();
+        showTrainer();
         pause(2_500);
         clear();
-        try {
-            Files.readAllLines(Path.of("images/surprise.txt")).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         pause(3_500);
         clear();
         showOpponentPokemon();
@@ -356,7 +347,7 @@ public class PokeBattle {
         }
 
         if (allFainted) {
-            System.out.println("All of your Pokemon fainted from battle");
+            System.out.println("\t All of your Pokemon fainted from battle");
             pause(2_000);
             blankLines(1);
             runAway();
@@ -422,7 +413,7 @@ public class PokeBattle {
     }
 
     private void showOpponentPokemon() {
-        System.out.printf("%s selected %s.\n", activeOpponent.getName(), opponentPokemon.getName());
+        System.out.printf("%s summons %s.\n", activeOpponent.getName(), opponentPokemon.getName());
         pause(2_000);
         clear();
         System.out.println(opponentPokemon.getArt());
@@ -431,7 +422,7 @@ public class PokeBattle {
     }
 
     private void showPlayerPokemon() {
-        System.out.printf("You selected %s.\n", activePokemon.getName());
+        System.out.printf("You summon %s.\n", activePokemon.getName());
         pause(2_000);
         clear();
         System.out.println(activePokemon.getArt());
@@ -451,5 +442,6 @@ public class PokeBattle {
         }
         pause(3_500);
         clear();
+        activeOpponent.loadDialogue(activeOpponent.getName());
     }
 }

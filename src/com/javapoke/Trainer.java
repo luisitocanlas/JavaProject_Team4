@@ -6,6 +6,7 @@ public class Trainer {
     //fields
     private String name;
     private Map<Integer, Pokemon> pokemon;
+    Dialogue dialogue = new Dialogue();
 
     //constructors
     public Trainer() {
@@ -18,6 +19,29 @@ public class Trainer {
     public Trainer(String name, Map<Integer, Pokemon> pokemon) {
         this.name = name;
         this.pokemon = pokemon;
+    }
+
+    public void loadDialogue(String name) {
+        switch (name) {
+            case "Agatha":
+                dialogue.agathaDialogue();
+                break;
+            case "Bruno":
+                dialogue.brunoDialogue();
+                break;
+            case "Lorelei":
+                dialogue.loreleiDialogue();
+                break;
+            case "Lance":
+                dialogue.lanceDialogue();
+                break;
+            case "THE Joshua BLOCH":
+                dialogue.joshDialogue();
+                break;
+            case "Surprise":
+                dialogue.surpriseDialogue();
+                break;
+        }
     }
 
     //accessors
