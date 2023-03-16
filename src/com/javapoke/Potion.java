@@ -6,7 +6,7 @@ public enum Potion {
 
     private final int value;
 
-    private Potion(int value) {
+    Potion(int value) {
         this.value = value;
     }
 
