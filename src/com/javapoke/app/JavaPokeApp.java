@@ -14,6 +14,10 @@ import static com.apps.util.Console.*;
 public class JavaPokeApp implements SplashApp {
     private static final int maxLengthCharactersForName = 12;
     private static final int maxNumOfPokemon = 4;
+    private static String gameOverMessage;
+    private static String thankYouMessage;
+    private static String pokemonChart;
+    private static String trainerSelection;
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
@@ -36,15 +40,9 @@ public class JavaPokeApp implements SplashApp {
 
     private void gameOver() {
         clear();
-        try {
-            Files.readAllLines(Path.of("images/gameOver.txt"))
-                    .forEach(System.out::println);
-            Console.pause(3000);
-            Files.readAllLines(Path.of("images/thank_you_message.txt"))
-                    .forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(gameOverMessage);
+        Console.pause(3_000);
+        System.out.println(thankYouMessage);
     }
 
     private void startGame(Trainer player) {
@@ -56,17 +54,14 @@ public class JavaPokeApp implements SplashApp {
      * This method will allow the user to choose from a Map of Pokémon and depending on their input
      * will add the Pokémon to their arsenal. Will reject duplicates and prompt the user again.
      */
+
     private void choosePokemon() {
         clear();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();
-        try {
-            Files.readAllLines(Path.of("images/PokemonChart.txt"))
-                    .forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        System.out.println(pokemonChart);
         blankLines(1);
+
         for (int i = 0; i < maxNumOfPokemon; i++) {
             String pokemonPrompt = prompter.prompt("\t Input the Option # to select pokemon #" +
                     (i + 1) + ": ", "^[1-9]|10$", "\n\t\t This is not a valid option!\n");
@@ -79,8 +74,8 @@ public class JavaPokeApp implements SplashApp {
         }
         player.setPokemon(trainerPokemon);
     }
-
     // Method to load the Pokemon from a CSV file into a Map<Integer,Pokemon>
+
     Map<Integer, Pokemon> loadPokemonMap()
     throws RuntimeException {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
@@ -97,28 +92,22 @@ public class JavaPokeApp implements SplashApp {
                 pokemonMap.put(Integer.valueOf(tokens[0]),
                         new Pokemon(tokens[1], Integer.parseInt(tokens[2]),
                                 Integer.parseInt(tokens[3]), tokens[4],
-                        Files.readString(Path.of(tokens[5]))));
+                                Files.readString(Path.of(tokens[5]))));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return pokemonMap;
     }
-
     // Method to allow the user to choose the Trainer of their choice or create one.
+
     private void chooseTrainer() {
         clear();
 
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
 
-        String trainerPrompt = "images/trainer_selection.txt";
-        try {
-            Files.readAllLines(Path.of(trainerPrompt))
-                    .forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(trainerSelection);
 
         String input = prompter.prompt("\t\t What choice would you like to choose: ", "^[1-4]$"
                 , "\n\t\t This is not a valid option!\n");
@@ -135,11 +124,22 @@ public class JavaPokeApp implements SplashApp {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLengthCharactersForName + "}$", "\n\t\t Name must not exceed "
+                        , "^.{1," + maxLengthCharactersForName + "}$", "\n\t\t Name must not exceed "
                                 + maxLengthCharactersForName
                                 + " characters!\n");
                 player = new Trainer(characterName);
                 break;
+        }
+    }
+
+    static {
+        try {
+            gameOverMessage = Files.readString(Path.of("images/gameOver.txt"));
+            thankYouMessage = Files.readString(Path.of("images/thank_you_message.txt"));
+            pokemonChart = Files.readString(Path.of("images/PokemonChart.txt"));
+            trainerSelection = Files.readString(Path.of("images/trainer_selection.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
