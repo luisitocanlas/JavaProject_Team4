@@ -25,11 +25,12 @@ public class PokeBattle {
     private static int maxHP2;
     private static int maxHP3;
     private static int maxHP4;
+    private final Map<String, Integer> maxHpContainer = new TreeMap<>();
 
     private final Prompter prompter;
     private Pokemon activePokemon;
     private Trainer trainer;
-    private final Pokemon mewtwo = new Pokemon("Mewtwo", 60, 150, "Psychic");
+//    private final Pokemon mewtwo = new Pokemon("Mewtwo", 60, 150, "Psychic");
 
     private final EliteTrainer lorelei = new EliteTrainer().loadLorelei();
     private final EliteTrainer bruno = new EliteTrainer().loadBruno();
@@ -173,29 +174,25 @@ public class PokeBattle {
                 "\nThis is not a valid option!\n");
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
             potion -= 1;
-
-//            maxHP = pullMaxHP();
+            pullMaxHP();    // gets the max hp for the active pokemon
             if (activePokemon.getHitPoints() + POTION.getValue() > maxHP) {
                 activePokemon.setHitPoints(maxHP);
             }
             else {
                 activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
             }
-
             System.out.printf("You used Potion! Potion remaining: %s\n", potion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
             blankLines(1);
         } else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
             superPotion -= 1;
-
-//            max = pullMaxHP();
+            pullMaxHP();    // gets the max hp for the active pokemon
             if (activePokemon.getHitPoints() + SUPER_POTION.getValue() > maxHP) {
                 activePokemon.setHitPoints(maxHP);
             }
             else{
                 activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
             }
-
             System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
             blankLines(1);
@@ -426,19 +423,26 @@ public class PokeBattle {
     }
 
     private void setMaxHP(){
+        // get max hp of each selected pokemon
         maxHP1 = trainer.getPokemon().get(1).getHitPoints();
         maxHP2 = trainer.getPokemon().get(2).getHitPoints();
         maxHP3 = trainer.getPokemon().get(3).getHitPoints();
         maxHP4 = trainer.getPokemon().get(4).getHitPoints();
+        // container for pokemon max hp
+        maxHpContainer.put(trainer.getPokemon().get(1).getName(), maxHP1);
+        maxHpContainer.put(trainer.getPokemon().get(2).getName(), maxHP2);
+        maxHpContainer.put(trainer.getPokemon().get(3).getName(), maxHP3);
+        maxHpContainer.put(trainer.getPokemon().get(4).getName(), maxHP4);
     }
 
-//    private int pullMaxHP() {
-//        for (Pokemon pokemon : trainer.getPokemon().values()) {
-//            if () {
-//
-//            }
-//        }
-//    }
+    private void pullMaxHP() {
+        for (Map.Entry<String, Integer> pokemon : maxHpContainer.entrySet()) {
+            if (activePokemon.getName().equals(pokemon.getKey())) {
+                maxHP = pokemon.getValue();
+                break;
+            }
+        }
+    }
 
     private void showOpponentPokemon() {
         System.out.printf("%s selected %s.\n", activeOpponent.getName(), opponentPokemon.getName());
