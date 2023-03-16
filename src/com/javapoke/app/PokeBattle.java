@@ -41,9 +41,7 @@ public class PokeBattle {
         this.prompter = prompter;
     }
 
-    /*
-     * Business methods-------------------------------------------------------------------------------------------------
-     */
+    // Business Methods()
 
     // this method is for getting the data from the prompts and storing them in the containers
     void startPokeBattle(Trainer player) {
@@ -145,33 +143,47 @@ public class PokeBattle {
         System.out.printf("[2] Super potion: %2s\n", superPotion);
         System.out.println("[3] Back\n");
         String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
+
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
-            potion--;
             pullMaxHP();    // gets the max hp for the active pokemon
-            if (activePokemon.getHitPoints() + POTION.getValue() > maxHP) {
+            if (activePokemon.getHitPoints() > maxHP) {
                 activePokemon.setHitPoints(maxHP);
+            } else if (activePokemon.getHitPoints() == maxHP) {
+                blankLines(1);
+                System.out.println(activePokemon.getName() + "'s health is full. You can not use a Potion");
+            } else if (activePokemon.getHitPoints() + POTION.getValue() > maxHP) {
+                potion--;
+                activePokemon.setHitPoints(maxHP);
+                System.out.printf("You used Potion! Potion remaining: %s\n", potion);
+                System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
             } else {
+                potion--;
                 activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
+                System.out.printf("You used Potion! Potion remaining: %s\n", potion);
+                System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
             }
-            System.out.printf("You used Potion! Potion remaining: %s\n", potion);
-            System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
-            blankLines(1);
         } else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
-            superPotion--;
             pullMaxHP();    // gets the max hp for the active pokemon
-            if (activePokemon.getHitPoints() + SUPER_POTION.getValue() > maxHP) {
+            if (activePokemon.getHitPoints() > maxHP) {
                 activePokemon.setHitPoints(maxHP);
+            } else if (activePokemon.getHitPoints() == maxHP) {
+                blankLines(1);
+                System.out.println(activePokemon.getName() + "'s health is full. You can not use a Super Potion");
+            } else if (activePokemon.getHitPoints() + SUPER_POTION.getValue() > maxHP) {
+                superPotion--;
+                activePokemon.setHitPoints(maxHP);
+                System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
+                System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
             } else {
+                superPotion--;
                 activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
+                System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
+                System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
             }
-            System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
-            System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
-            blankLines(1);
         } else if (Integer.parseInt(prompt) == 3) {
             battle();
         } else if (potion == 0 && superPotion == 0) {
-            System.out.println("You have ran out of potions!\n");
-            blankLines(1);
+            System.out.println("\nYou have ran out of potions!\n");
         }
         pause(2_500);
         // go back to main battle options
@@ -207,10 +219,6 @@ public class PokeBattle {
         pause(2_500);
         isGameOver = true;
     }
-
-    /*
-     * Minor methods----------------------------------------------------------------------------------------------------
-     */
 
     private void nextPokemon() {     // just for the current opponent's pokemon
         clear();
