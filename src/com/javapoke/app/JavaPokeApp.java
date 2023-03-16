@@ -12,9 +12,8 @@ import java.util.*;
 import static com.apps.util.Console.*;
 
 public class JavaPokeApp implements SplashApp {
-    private static final int maxLength = 12;
+    private static final int maxLengthCharactersForName = 12;
     private static final int maxNumOfPokemon = 4;
-    private static final String pokemonData = "data/Pokemon Chart.csv";
 
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
@@ -82,11 +81,12 @@ public class JavaPokeApp implements SplashApp {
     }
 
     // Method to load the Pokemon from a CSV file into a Map<Integer,Pokemon>
-    public Map<Integer, Pokemon> loadPokemonMap()
+    Map<Integer, Pokemon> loadPokemonMap()
     throws RuntimeException {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
 
         try {
+            String pokemonData = "data/Pokemon Chart.csv";
             List<String> lines = Files.readAllLines(Path.of(pokemonData));
 
             for (String line : lines) {
@@ -135,7 +135,8 @@ public class JavaPokeApp implements SplashApp {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1,"+ maxLengthCharactersForName + "}$", "\n\t\t Name must not exceed "
+                                + maxLengthCharactersForName
                                 + " characters!\n");
                 player = new Trainer(characterName);
                 break;
