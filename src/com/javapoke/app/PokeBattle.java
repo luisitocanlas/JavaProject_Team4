@@ -26,6 +26,15 @@ public class PokeBattle {
     private final Map<Integer, Trainer> opponents = new TreeMap<>(Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance));
     private final Trainer surprise = surprise();
 
+    private static String battleMenu;
+    static{
+        try {
+            battleMenu = Files.readString(Path.of("images/battle_Prompt.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private int potion = 10;
     private int superPotion = 5;
     private int maxHP;
@@ -79,20 +88,21 @@ public class PokeBattle {
             inBattle = true;
 
             // show opponentPokemon details here
-            System.out.println(activeOpponent.getName());
-            System.out.printf("%-14s   HP: %s", opponentPokemon.getName(), opponentPokemon.getHitPoints());
+            System.out.printf("Trainer: %s\n", activeOpponent.getName());
+            System.out.printf("Pokemon: %-14s   HP: %s", opponentPokemon.getName(), opponentPokemon.getHitPoints());
             blankLines(2);
             // show activePokemon details here
-            System.out.println(trainer.getName());
-            System.out.printf("%-14s   HP: %s ", activePokemon.getName(), activePokemon.getHitPoints());
+            System.out.printf("Trainer: %s\n", trainer.getName());
+            System.out.printf("Pokemon: %-14s   HP: %s ", activePokemon.getName(), activePokemon.getHitPoints());
 
             blankLines(1);
 
-            try {
-                Files.readAllLines(Path.of("images/battle_Prompt.txt")).forEach(System.out::println);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println(battleMenu);
+//            try {
+//                Files.readAllLines(Path.of("images/battle_Prompt.txt")).forEach(System.out::println);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             blankLines(1);
             String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4", "\n\t This is not a valid option!\n");
@@ -139,9 +149,11 @@ public class PokeBattle {
     private void useItem() {
         clear();
         // ask the player which potion to use
-        System.out.printf("[1] Potion: %8s\n", potion);
-        System.out.printf("[2] Super potion: %2s\n", superPotion);
-        System.out.println("[3] Back\n");
+        System.out.println("    Option         Heals HP by:    Qty:");
+        System.out.println("    ======         ============    ====");
+        System.out.printf("[1] Potion              50    %8s\n", potion);
+        System.out.printf("[2] Super potion       100          %2s\n", superPotion);
+        System.out.println("[3] Back to main battle\n");
         String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
 
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
@@ -185,7 +197,7 @@ public class PokeBattle {
         } else if (potion == 0 && superPotion == 0) {
             System.out.println("\nYou have ran out of potions!\n");
         }
-        pause(2_500);
+        pause(3_500);
         // go back to main battle options
         battle();
     }
