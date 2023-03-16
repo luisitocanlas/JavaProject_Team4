@@ -21,17 +21,21 @@ public class PokeBattle {
     private static int potion = 10;
     private static int superPotion = 5;
     private static int maxHP;
+    private static int maxHP1;
+    private static int maxHP2;
+    private static int maxHP3;
+    private static int maxHP4;
 
     private final Prompter prompter;
     private Pokemon activePokemon;
     private Trainer trainer;
-    private final Pokemon mewtwo = new Pokemon("Mewtwo", 60, 255, "Psychic");
+    private final Pokemon mewtwo = new Pokemon("Mewtwo", 60, 150, "Psychic");
     private final EliteTrainer lorelei = new EliteTrainer().loadLorelei();
     private final EliteTrainer bruno = new EliteTrainer().loadBruno();
     private final EliteTrainer agatha = new EliteTrainer().loadAgatha();
     private final EliteTrainer lance = new EliteTrainer().loadLance();
     private final Trainer surprise = new Trainer("THE Joshua BLOCH", Map.of(1, mewtwo));
-    private final Map<Integer, Trainer> opponents = Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance);
+    private final Map<Integer, Trainer> opponents = new TreeMap<>(Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance));
     private boolean gameOver = false;
 
     // container for active opponent, and their active pokemon, will initialize for the first opponent
@@ -51,11 +55,14 @@ public class PokeBattle {
         trainer = player;
         // container for the active pokemon for the current battle, should be getting from user
         activePokemon = trainer.getPokemon().get(1);
+        setMaxHP(); // sets maxHP used for healing your pokemon
+
         // go to battle!
         battle();
     }
 
     private void battleOver() {
+        gameOver = true;
         System.out.println("I can't believe it...");
         pause(2_500);
         System.out.printf("You really beat %s!\n", surprise.getName());
@@ -122,13 +129,13 @@ public class PokeBattle {
             System.out.printf("%s's %s fainted from battle.\n", activeOpponent.getName(), opponentPokemon.getName());
             blankLines(1);
             opponentPokemon.setFainted(true);
+            opponentPokemon.setHitPoints(0);
             inBattle = false;
             pause(2_000);
             nextPokemon();
         } else {
             opponentTurn();
         }
-
     }
 
     private void useItem() {
@@ -141,13 +148,31 @@ public class PokeBattle {
                 "\nThis is not a valid option!\n");
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
             potion -= 1;
-            activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
+
+//            maxHP = pullMaxHP();
+            if (activePokemon.getHitPoints() + POTION.getValue() > maxHP) {
+                activePokemon.setHitPoints(maxHP);
+            }
+            else {
+                activePokemon.setHitPoints(activePokemon.getHitPoints() + POTION.getValue());
+            }
+
+
             System.out.printf("You used Potion! Potion remaining: %s\n", potion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), POTION.getValue());
             blankLines(1);
         } else if (superPotion >= 1 && Integer.parseInt(prompt) == 2) {
             superPotion -= 1;
-            activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
+
+//            max = pullMaxHP();
+            if (activePokemon.getHitPoints() + SUPER_POTION.getValue() > maxHP) {
+                activePokemon.setHitPoints(maxHP);
+            }
+            else{
+                activePokemon.setHitPoints(activePokemon.getHitPoints() + SUPER_POTION.getValue());
+            }
+
+
             System.out.printf("You used Super Potion! Super Potion remaining: %s\n", superPotion);
             System.out.printf("%s healed by %s points\n", activePokemon.getName(), SUPER_POTION.getValue());
             blankLines(1);
@@ -158,8 +183,6 @@ public class PokeBattle {
             blankLines(1);
         }
         pause(2_500);
-        // computer attacks your pokemon
-//        opponentTurn();
         // go back to main battle options
         battle();
     }
@@ -182,8 +205,6 @@ public class PokeBattle {
             // switch [inBattle=true]
             inBattle = true;
         }
-        // go back to main battle options
-        battle();
     }
 
     private void runAway() {
@@ -337,7 +358,6 @@ public class PokeBattle {
                 Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
                 if (!selectedPokemon.isFainted()) {
                     activePokemon = selectedPokemon;
-                    maxHP = activePokemon.getHitPoints();   // sets max hp for the selected pokemon
                     System.out.printf("You selected %s.\n", activePokemon.getName());
                     pause(2_000);
                     blankLines(1);
@@ -364,9 +384,26 @@ public class PokeBattle {
             System.out.printf("%s fainted from battle.\n", activePokemon.getName());
             blankLines(1);
             activePokemon.setFainted(true);
+            activePokemon.setHitPoints(0);
             inBattle = false;
             pause(2_000);
             switchPokemon();
         }
     }
+
+    private void setMaxHP(){
+        maxHP1 = trainer.getPokemon().get(1).getHitPoints();
+        maxHP2 = trainer.getPokemon().get(2).getHitPoints();
+        maxHP3 = trainer.getPokemon().get(3).getHitPoints();
+        maxHP4 = trainer.getPokemon().get(4).getHitPoints();
+    }
+
+//    private int pullMaxHP() {
+//        for (Pokemon pokemon : trainer.getPokemon().values()) {
+//            if () {
+//
+//            }
+//        }
+//    }
+
 }
