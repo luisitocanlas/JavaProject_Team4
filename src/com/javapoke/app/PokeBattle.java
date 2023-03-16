@@ -27,13 +27,10 @@ public class PokeBattle {
     private final Trainer surprise = surprise();
 
     private static String battleMenu;
-    static{
-        try {
-            battleMenu = Files.readString(Path.of("images/battle_Prompt.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static String runAwayBanner;
+    private static String battleOverBanner;
+    private static String congratulationsBanner;
+    private static String continuePrompt;
 
     private int potion = 10;
     private int superPotion = 5;
@@ -44,7 +41,6 @@ public class PokeBattle {
     private Trainer activeOpponent = opponents.get(1);
     private boolean isGameOver = false;
     private Pokemon opponentPokemon = activeOpponent.getPokemon().get(1);
-
 
     PokeBattle(Prompter prompter) {
         this.prompter = prompter;
@@ -71,15 +67,13 @@ public class PokeBattle {
         isGameOver = true;
         pause(3_000);
         clear();
-        try {
-            Files.readAllLines(Path.of("images/battleOver_Banner.txt")).forEach(System.out::println);
-            pause(3_500);
-            clear();
-            Files.readAllLines(Path.of("images/congratulations_banner.txt")).forEach(System.out::println);
-            pause(3_500);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        System.out.println(battleOverBanner);
+        pause(3_500);
+        clear();
+
+        System.out.println(congratulationsBanner);
+        pause(3_500);
     }
 
     private void battle() {
@@ -94,17 +88,11 @@ public class PokeBattle {
             // show activePokemon details here
             System.out.printf("Trainer: %s\n", trainer.getName());
             System.out.printf("Pokemon: %-14s   HP: %s ", activePokemon.getName(), activePokemon.getHitPoints());
-
             blankLines(1);
 
             System.out.println(battleMenu);
-//            try {
-//                Files.readAllLines(Path.of("images/battle_Prompt.txt")).forEach(System.out::println);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
             blankLines(1);
+
             String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4", "\n\t This is not a valid option!\n");
             switch (Integer.parseInt(battlePrompt)) {
                 case 1:
@@ -149,10 +137,10 @@ public class PokeBattle {
     private void useItem() {
         clear();
         // ask the player which potion to use
-        System.out.println("    Option         Heals HP by:    Qty:");
-        System.out.println("    ======         ============    ====");
-        System.out.printf("[1] Potion              50    %8s\n", potion);
-        System.out.printf("[2] Super potion       100          %2s\n", superPotion);
+        System.out.println("    Option                 Heals HP by:    Qty:");
+        System.out.println("    ======                 ============    ====");
+        System.out.printf("[1] Potion                      50    %8s\n", potion);
+        System.out.printf("[2] Super potion               100          %2s\n", superPotion);
         System.out.println("[3] Back to main battle\n");
         String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
 
@@ -223,11 +211,7 @@ public class PokeBattle {
 
     private void runAway() {
         clear();
-        try {
-            Files.readAllLines(Path.of("images/runAwayBanner.txt")).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(runAwayBanner);
         pause(2_500);
         isGameOver = true;
     }
@@ -262,11 +246,7 @@ public class PokeBattle {
 
     private void fightOn() { // ask the player if they want to continue fighting or give up.
         clear();
-        try {
-            Files.readAllLines(Path.of("images/continue_Prompt.txt")).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(continuePrompt);
         String continuePrompt = prompter.prompt("\t What will you do? ", "1|2", "\n\t This is not a valid option!\n");
         switch (Integer.parseInt(continuePrompt)) {
             case 1:
@@ -324,8 +304,6 @@ public class PokeBattle {
         opponentPokemon = surprise.getPokemon().get(1);
         clear();
         showTrainer();
-        pause(2_500);
-        clear();
         pause(3_500);
         clear();
         showOpponentPokemon();
@@ -463,5 +441,36 @@ public class PokeBattle {
         pause(3_500);
         clear();
         activeOpponent.loadDialogue(activeOpponent.getName());
+    }
+
+    static{
+        try {
+            battleMenu = Files.readString(Path.of("images/battle_Prompt.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            runAwayBanner = Files.readString(Path.of("images/runAwayBanner.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            battleOverBanner = Files.readString(Path.of("images/battleOver_Banner.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            congratulationsBanner = Files.readString(Path.of("images/congratulations_banner.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            continuePrompt = Files.readString(Path.of("images/continue_Prompt.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
