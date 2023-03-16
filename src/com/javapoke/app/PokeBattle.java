@@ -93,6 +93,7 @@ public class PokeBattle {
             pause(3_500);
             Files.readAllLines(Path.of("images/congratulations_banner.txt"))
                     .forEach(System.out::println);
+            pause(3_500);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -388,8 +389,8 @@ public class PokeBattle {
                 Pokemon selectedPokemon = trainer.getPokemon().get(Integer.parseInt(pokemonPrompt));
                 if (!selectedPokemon.isFainted()) {
                     activePokemon = selectedPokemon;
-                    System.out.printf("You selected %s.\n", activePokemon.getName());
-                    pause(2_000);
+//                    System.out.printf("You selected %s.\n", activePokemon.getName());
+//                    pause(2_000);
                     showPlayerPokemon();
                     blankLines(1);
                     battle();
