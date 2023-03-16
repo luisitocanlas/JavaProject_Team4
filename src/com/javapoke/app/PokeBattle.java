@@ -16,7 +16,6 @@ import static com.javapoke.Potion.*;
 
 
 public class PokeBattle {
-    // fields
     private static boolean inBattle = false;
     private static int potion = 10;
     private static int superPotion = 5;
@@ -387,6 +386,7 @@ public class PokeBattle {
         System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
         Console.blankLines(1);
         pause(2_000);
+        clear();
 
         if (activePokemon.getHitPoints() <= 0) {  // if your pokemon fainted, automatically call switch pokemon
             System.out.printf("%s fainted from battle.\n", activePokemon.getName());

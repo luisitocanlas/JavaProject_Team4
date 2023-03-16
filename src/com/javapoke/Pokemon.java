@@ -1,5 +1,7 @@
 package com.javapoke;
 
+import java.util.Random;
+
 public class Pokemon {
     // fields
     private final String name;
@@ -25,19 +27,14 @@ public class Pokemon {
         this.art = art;
     }
 
-    /*
-     * int damage = Attack.getDamage()
-     * other.setHitPoints -= damage;
-     */
-    // TODO: Ask Lui how is he updating the Pokemon's health
     public int attack(Pokemon other) {
         int damage = Attack.getDamage();
         other.takeDamage(damage);
         return damage;
     }
-    // TODO: This method could help with the other TODO suggestion
-    private int takeDamage(int damage) {
-        return this.hitPoints -= damage;
+
+    private void takeDamage(int damage) {
+        this.hitPoints -= damage;
     }
 
     // accessors
@@ -77,5 +74,15 @@ public class Pokemon {
     public String toString() {
         return getClass().getSimpleName() + ": name=" + name + ", level=" + level + ", hitPoints=" +
                 hitPoints + ", isFainted=" + isFainted + ", attack=" + attack + ", art=\n" + art;
+    }
+
+    //inner classes
+    static class Attack {
+
+        public static int getDamage() {
+            Random random = new Random();
+            // damage will be between 30~60, attack modifier will be for future code
+            return random.nextInt(30) + 30;
+        }
     }
 }
