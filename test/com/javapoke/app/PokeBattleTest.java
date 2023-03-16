@@ -1,16 +1,14 @@
 package com.javapoke.app;
 
 import com.apps.util.Prompter;
+import com.javapoke.EliteTrainer;
 import com.javapoke.Pokemon;
 import com.javapoke.Trainer;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 import static com.apps.util.Console.blankLines;
@@ -22,10 +20,84 @@ public class PokeBattleTest {
     // fixture
     Prompter prompter;
     private Trainer trainer = new Trainer("Ash");
+    private EliteTrainer lorelei = new EliteTrainer().loadLorelei();
+    private EliteTrainer bruno = new EliteTrainer().loadBruno();
+    private Map<Integer, Trainer> opponents;
 
     @Test
     public void attack_shouldReturnAttackDamage() {
+        Pokemon activePokemon = new Pokemon("Snorlax",60,180,"Body Slam");
+        Pokemon opponentPokemon = lorelei.getPokemon().get(1);
 
+        System.out.println("HP: " + opponentPokemon.getHitPoints());
+        int beforeAttack = opponentPokemon.getHitPoints();
+        int attack = activePokemon.attack(opponentPokemon);
+        System.out.printf("%s used %s\n", activePokemon.getName(), activePokemon.getAttack());
+        System.out.printf("Deals %s points of damage to %s\n", attack, opponentPokemon.getName());
+        System.out.println("HP: " + opponentPokemon.getHitPoints());
+        int afterAttack = opponentPokemon.getHitPoints();
+
+        assertEquals((beforeAttack - afterAttack) ,attack);
+    }
+
+    @Test
+    public void opponentSwitch_shouldSwitchToNextOpponent_whenAllFainted() {
+        opponents = new TreeMap<>(Map.of(1, lorelei, 2, bruno));
+
+        Trainer activeOpponent = lorelei;
+        Pokemon opponentPokemon = null;
+
+        lorelei.getPokemon().get(1).setFainted(true);
+        lorelei.getPokemon().get(2).setFainted(true);
+        lorelei.getPokemon().get(3).setFainted(true);
+        lorelei.getPokemon().get(4).setFainted(true);
+
+        boolean allFainted = true;
+        for (Pokemon pokemon : activeOpponent.getPokemon().values()) {
+            if (!pokemon.isFainted()) {
+                allFainted = false;
+                opponentPokemon = pokemon;
+                break;
+            }
+        }
+        if (allFainted) {
+            System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
+        }
+        for (Map.Entry<Integer, Trainer> opponent : opponents.entrySet()) {
+            // check each elite 4 if they have pokemon alive
+            for (Pokemon pokemon : opponent.getValue().getPokemon().values()) {
+                if (!pokemon.isFainted()) {
+                    allFainted = false;
+                    activeOpponent = opponent.getValue();
+                    opponentPokemon = activeOpponent.getPokemon().get(1);
+                    break;
+                }
+            }
+            if (!allFainted) {
+                System.out.println("You defeated all opponents!");
+                break;
+            }
+        }
+
+        assertSame(bruno, activeOpponent);
+        assertSame(bruno.getPokemon().get(1), opponentPokemon);
+    }
+
+    @Test
+    public void opponentPokemon_shouldSwitchPokemon_whenFainted() {
+        Pokemon opponentPokemon = null;
+
+        lorelei.getPokemon().get(1).setFainted(true);
+        lorelei.getPokemon().get(2).setFainted(true);
+
+        for (Pokemon pokemon : lorelei.getPokemon().values()) {
+            if (!pokemon.isFainted()) {
+                opponentPokemon = pokemon;
+                break;
+            }
+        }
+
+        assertSame(lorelei.getPokemon().get(3), opponentPokemon);
     }
 
     @Test
@@ -36,7 +108,7 @@ public class PokeBattleTest {
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();
         int maxNumOfPokemon = 4;
         for (int i = 0; i < maxNumOfPokemon; i++) {
-            trainerPokemon.put(i+1, pokemonMap.get(i+1));
+            trainerPokemon.put(i + 1, pokemonMap.get(i + 1));
         }
         trainer.setPokemon(trainerPokemon);
 
@@ -173,8 +245,7 @@ public class PokeBattleTest {
         String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
         if (Integer.parseInt(prompt) == 1) {
             healValue = POTION.getValue();
-        }
-        else if (Integer.parseInt(prompt) == 2) {
+        } else if (Integer.parseInt(prompt) == 2) {
             healValue = SUPER_POTION.getValue();
         }
 
@@ -190,8 +261,7 @@ public class PokeBattleTest {
         String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
         if (Integer.parseInt(prompt) == 1) {
             healValue = POTION.getValue();
-        }
-        else if (Integer.parseInt(prompt) == 2) {
+        } else if (Integer.parseInt(prompt) == 2) {
             healValue = SUPER_POTION.getValue();
         }
 
