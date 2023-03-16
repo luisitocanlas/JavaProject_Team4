@@ -412,7 +412,7 @@ public class PokeBattle {
 
     private void showOpponentPokemon() {
         System.out.printf("%s summons %s.\n", activeOpponent.getName(), opponentPokemon.getName());
-        pause(2_000);
+        pause(2_500);
         clear();
         System.out.println(opponentPokemon.getArt());
         pause(5_000);
@@ -421,7 +421,7 @@ public class PokeBattle {
 
     private void showPlayerPokemon() {
         System.out.printf("You summon %s.\n", activePokemon.getName());
-        pause(2_000);
+        pause(2_500);
         clear();
         System.out.println(activePokemon.getArt());
         pause(5_000);
