@@ -1,11 +1,15 @@
 ===========================================================================================
 ||            Objective: Defeat the Elite Four and be the #1 Pokemon Trainer             ||
 ||                                                                                       ||
-||                                       R U L E S:                                      ||
+||                                       R U L E S                                       ||
 ||                                                                                       ||
 ||        1. You'll be given a fixed amount of Potions and Super Potions (items).        ||
 ||        2. Your items will not regenerate after a battle is completed.                 ||
 ||        3. If all your pokemon have fainted. You lose!!!                               ||
 ||        4. The first Pokemon you pick will be 1st active in battle.                    ||
+||        5. If you select Run Away in the battle Prompt or select Give Up after         || 
+||           a battle. You will run away from the challenge and the Game is Over.        || 
 ||                                                                                       ||
 ===========================================================================================
+
+                    Would you like to continue and begin the Challenge?
