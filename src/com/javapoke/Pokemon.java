@@ -6,16 +6,10 @@ public class Pokemon {
     private final int level;
     private int hitPoints;
     private boolean isFainted = false;
-    private String attack;     // [ attackName : attack damage ], might have to change this to just a name
-    private String art;                       // attack damage will be handled by a number randomizer
+    private final String attack;
+    private String art;
 
     // constructors
-    public Pokemon(String name, int level, int hitPoints){
-        this.name = name;
-        this.level = level;
-        this.hitPoints = hitPoints;
-    }
-
     public Pokemon(String name, int level, int hitPoints, String attack) {
         this.name = name;
         this.level = level;
@@ -35,10 +29,15 @@ public class Pokemon {
      * int damage = Attack.getDamage()
      * other.setHitPoints -= damage;
      */
+    // TODO: Ask Lui how is he updating the Pokemon's health
     public int attack(Pokemon other) {
         int damage = Attack.getDamage();
         other.takeDamage(damage);
         return damage;
+    }
+    // TODO: This method could help with the other TODO suggestion
+    private int takeDamage(int damage) {
+        return this.hitPoints -= damage;
     }
 
     // accessors
@@ -52,10 +51,6 @@ public class Pokemon {
 
     public int getHitPoints() {
         return hitPoints;
-    }
-
-    private int takeDamage(int damage) {
-        return this.hitPoints -= damage;
     }
 
     public void setHitPoints(int hitPoints) {
@@ -78,18 +73,9 @@ public class Pokemon {
         return art;
     }
 
-    public void setArt(String art) {
-        this.art = art;
-    }
-
     @Override
     public String toString() {
-        return "Pokemon{" +
-                "name='" + name + '\'' +
-                ", level=" + level +
-                ", hitPoints=" + hitPoints +
-                ", isFainted=" + isFainted +
-                ", attack=" + attack +
-                ", art=" + art + '}';
+        return getClass().getSimpleName() + ": name=" + name + ", level=" + level + ", hitPoints=" +
+                hitPoints + ", isFainted=" + isFainted + ", attack=" + attack + ", art=\n" + art;
     }
 }

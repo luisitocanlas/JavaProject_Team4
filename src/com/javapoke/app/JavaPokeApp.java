@@ -16,17 +16,11 @@ public class JavaPokeApp implements SplashApp {
     private static final int maxNumOfPokemon = 4;
     private static final String pokemonData = "data/Pokemon Chart.csv";
 
-//    private final PokeBattle pokeBattle = PokeBattle.getInstance(prompter);
-
     private final Map<Integer, Pokemon> pokemonMap = loadPokemonMap();
     private final Prompter prompter = new Prompter(new Scanner(System.in));
     private final Introduction intro = new Introduction(prompter);
     private final PokeBattle pokeBattle = new PokeBattle(prompter);
     private Trainer player;
-
-    /*
-     * TODO: Change all methods back to Private after all tests are completed
-     */
 
     @Override
     public void start() {
@@ -37,8 +31,8 @@ public class JavaPokeApp implements SplashApp {
         intro.startUp();    // Completed
         chooseTrainer();    // Completed
         choosePokemon();    // Completed
-        startGame(player);
-        gameOver();
+        startGame(player);  // TODO Create tests
+        gameOver();         // Completed
     }
 
     private void gameOver() {
@@ -61,12 +55,11 @@ public class JavaPokeApp implements SplashApp {
 
     /*
      * This method will allow the user to choose from a Map of Pokémon and depending on their input
-     * will add the Pokémon to their arsenal. Will need to make sure that the player may not choose
-     * the same Pokémon on the list.
+     * will add the Pokémon to their arsenal. Will reject duplicates and prompt the user again.
      */
     private void choosePokemon() {
         clear();
-        Map<Integer, Pokemon> trainerPokemon = new HashMap<>();      // changed to map instead of list
+        Map<Integer, Pokemon> trainerPokemon = new HashMap<>();
         try {
             Files.readAllLines(Path.of("images/PokemonChart.txt"))
                     .forEach(System.out::println);
@@ -88,6 +81,7 @@ public class JavaPokeApp implements SplashApp {
         player.setPokemon(trainerPokemon);
     }
 
+    // Method to load the Pokemon from a CSV file into a Map<Integer,Pokemon>
     public Map<Integer, Pokemon> loadPokemonMap()
     throws RuntimeException {
         Map<Integer, Pokemon> pokemonMap = new HashMap<>();
@@ -111,6 +105,7 @@ public class JavaPokeApp implements SplashApp {
         return pokemonMap;
     }
 
+    // Method to allow the user to choose the Trainer of their choice or create one.
     private void chooseTrainer() {
         clear();
 

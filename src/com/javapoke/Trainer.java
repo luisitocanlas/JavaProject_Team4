@@ -1,8 +1,5 @@
 package com.javapoke;
 
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Trainer {
@@ -42,9 +39,6 @@ public class Trainer {
 
     @Override
     public String toString() {
-        return "Trainer{" +
-                "name='" + name + '\'' +
-                ", pokemon=" + pokemon +
-                '}';
+        return getClass().getSimpleName() + ": name=" + name + ", pokemon=" + pokemon;
     }
 }
