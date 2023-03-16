@@ -28,8 +28,7 @@ public class PokeBattle {
     private final EliteTrainer bruno = new EliteTrainer().loadBruno();
     private final EliteTrainer agatha = new EliteTrainer().loadAgatha();
     private final EliteTrainer lance = new EliteTrainer().loadLance();
-    private final Map<Integer, Trainer> opponents = new TreeMap<>
-            (Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance));
+    private final Map<Integer, Trainer> opponents = new TreeMap<>(Map.of(1, lorelei, 2, bruno, 3, agatha, 4, lance));
     private final Trainer surprise = surprise();
 
     private Pokemon activePokemon;
@@ -65,11 +64,9 @@ public class PokeBattle {
     private void battleOver() {
         isGameOver = true;
         try {
-            Files.readAllLines(Path.of("images/battleOver_Banner.txt"))
-                    .forEach(System.out::println);
+            Files.readAllLines(Path.of("images/battleOver_Banner.txt")).forEach(System.out::println);
             pause(3_500);
-            Files.readAllLines(Path.of("images/congratulations_banner.txt"))
-                    .forEach(System.out::println);
+            Files.readAllLines(Path.of("images/congratulations_banner.txt")).forEach(System.out::println);
             pause(3_500);
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,15 +89,13 @@ public class PokeBattle {
             blankLines(1);
 
             try {
-                Files.readAllLines(Path.of("images/battle_Prompt.txt"))
-                        .forEach(System.out::println);
+                Files.readAllLines(Path.of("images/battle_Prompt.txt")).forEach(System.out::println);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             blankLines(1);
-            String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4",
-                    "\n\t This is not a valid option!\n");
+            String battlePrompt = prompter.prompt("\t What will you do? ", "1|2|3|4", "\n\t This is not a valid option!\n");
             switch (Integer.parseInt(battlePrompt)) {
                 case 1:
                     fight();
@@ -143,12 +138,11 @@ public class PokeBattle {
 
     private void useItem() {
         clear();
-        // ask the player which potion to use, TODO: maybe switch this to case
+        // ask the player which potion to use
         System.out.printf("[1] Potion: %8s\n", potion);
         System.out.printf("[2] Super potion: %2s\n", superPotion);
         System.out.println("[3] Back\n");
-        String prompt = prompter.prompt("Pick your poison: ", "1|2|3",
-                "\nThis is not a valid option!\n");
+        String prompt = prompter.prompt("Pick your poison: ", "1|2|3", "\nThis is not a valid option!\n");
         if (potion >= 1 && Integer.parseInt(prompt) == 1) {
             potion--;
             pullMaxHP();    // gets the max hp for the active pokemon
@@ -182,7 +176,7 @@ public class PokeBattle {
         battle();
     }
 
-    private void switchPokemon() {   // TODO: add an option to go back
+    private void switchPokemon() {   // for future implementation, add the option to switch pokemon in between battles
         clear();
         System.out.println("Choose a Pokemon.");
         blankLines(1);
@@ -204,8 +198,7 @@ public class PokeBattle {
     private void runAway() {
         clear();
         try {
-            Files.readAllLines(Path.of("images/runAwayBanner.txt"))
-                    .forEach(System.out::println);
+            Files.readAllLines(Path.of("images/runAwayBanner.txt")).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,7 +229,7 @@ public class PokeBattle {
                 pause(2_000);
                 blankLines(1);
                 battleOver();
-            } else {                                                      // goes to continue or give up
+            } else {                                                    // goes to continue or give up
                 System.out.printf("Congratulations on defeating %s!", activeOpponent.getName());
                 pause(2_000);
                 blankLines(1);
@@ -248,13 +241,11 @@ public class PokeBattle {
     private void fightOn() { // ask the player if they want to continue fighting or give up.
         clear();
         try {
-            Files.readAllLines(Path.of("images/continue_Prompt.txt"))
-                    .forEach(System.out::println);
+            Files.readAllLines(Path.of("images/continue_Prompt.txt")).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String continuePrompt = prompter.prompt("\t What will you do? ", "1|2",
-                "\n\t This is not a valid option!\n");
+        String continuePrompt = prompter.prompt("\t What will you do? ", "1|2", "\n\t This is not a valid option!\n");
         switch (Integer.parseInt(continuePrompt)) {
             case 1:
                 nextOpponent();
@@ -291,12 +282,13 @@ public class PokeBattle {
                 break;
             }
         }
-        // fires when all the elite 4 are defeated
+        // fires when all the elite 4 are defeated and the surprise champion is defeated
         if (hasNoPokemon && (surprise.getPokemon().get(1).isFainted())) {
             pause(2_000);
             blankLines(1);
             battleOver();
         }
+        // fires when all the elite 4 are defeated
         if (hasNoPokemon) {
             System.out.println("Congratulations!!! You defeated the Elite 4!\n");
             pause(2_000);
@@ -320,8 +312,7 @@ public class PokeBattle {
         pause(2_500);
         clear();
         try {
-            Files.readAllLines(Path.of("images/surprise.txt"))
-                    .forEach(System.out::println);
+            Files.readAllLines(Path.of("images/surprise.txt")).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -390,7 +381,7 @@ public class PokeBattle {
         }
     }
 
-    private void opponentTurn() {   // TODO: might need to adjust damage for difficulty
+    private void opponentTurn() {   // might need to adjust damage for difficulty
         int opponentAttack = opponentPokemon.attack(activePokemon);
         System.out.printf("%s used %s\n", opponentPokemon.getName(), opponentPokemon.getAttack());
         System.out.printf("Deals %s points of damage to %s\n", opponentAttack, activePokemon.getName());
