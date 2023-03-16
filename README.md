@@ -8,7 +8,9 @@ Getting Started:
 
 To run the game, you will need to have the Java Development Kit (JDK) and Java Virtual Machine (JVM) installed on your computer. Once you have these installed, you can extract the zip file and navigate to the project directory in your terminal or command prompt. From there, you can run the game using the following command:
 
-java -jar javapoke.jar
+Windows users must run "run.cmd"
+
+MacOS users must run "run.sh"
 
 Gameplay:
 
