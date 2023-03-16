@@ -31,7 +31,7 @@ public class JavaPokeApp implements SplashApp {
         intro.startUp();    // Completed
         chooseTrainer();    // Completed
         choosePokemon();    // Completed
-        startGame(player);  // TODO Create tests
+        startGame(player);  // Completed
         gameOver();         // Completed
     }
 
