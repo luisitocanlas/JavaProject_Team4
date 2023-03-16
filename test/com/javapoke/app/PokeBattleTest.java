@@ -1,6 +1,8 @@
-package com.javapoke;
+package com.javapoke.app;
 
 import com.apps.util.Prompter;
+import com.javapoke.Pokemon;
+import com.javapoke.Trainer;
 import org.junit.Before;
 import org.junit.Test;
 
