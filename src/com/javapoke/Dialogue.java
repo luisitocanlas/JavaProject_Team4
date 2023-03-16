@@ -37,11 +37,11 @@ class Dialogue {
         System.out.println("I am Agatha of the Elite Four!\n");
         pause(2_000);
         System.out.println("Jay's taken a lot of interest in you, child!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("That old duff was once tough and handsome! That was decades ago!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("Now he just wants to fiddle with his Effective Java!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("I will show you how a real trainer fights!");
         pause(5_000);
         clear();
@@ -69,17 +69,17 @@ class Dialogue {
     void joshDialogue() {
         blankLines(1);
         System.out.println("Hey! I was looking forward to seeing you!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("My rival should be strong to keep me sharp!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("While working on Effective Java, I looked all over for powerful Pokemon!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("Not only that, I managed to attain the strongest Pokemon known to man!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("And now! I'm the Pokemon League Champion\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("Do you know what that means. I'll tell you!\n");
-        pause(2_000);
+        pause(2_500);
         System.out.println("I'm the greatest Pokemon Trainer and also Java developer! \nFight me if you dare!");
         pause(5_000);
         clear();
