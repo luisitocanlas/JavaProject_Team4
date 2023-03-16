@@ -1,6 +1,7 @@
 package com.javapoke.app;
 
 import static com.apps.util.Console.*;
+
 import com.apps.util.Prompter;
 
 import java.io.IOException;
@@ -8,6 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 class Introduction {
+
+    private static String rulesOption;
+    private static String introBanner;
+    private static String rules;
+
     private final Prompter prompter;
 
     Introduction(Prompter prompter) {
@@ -28,12 +34,7 @@ class Introduction {
     private void welcomePrompt() {
         blankLines(1);
         clear();
-        String rulesOption = "images/rules_option.txt";
-        try {
-            Files.readAllLines(Path.of(rulesOption)).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(rulesOption);
         String input = prompter.prompt("\t\t\t Enter your input: "
                 , "Y|N|y|n", "\n\t\t\t This is not a valid option!\n");
         if ("Y".equalsIgnoreCase(input)) {
@@ -42,24 +43,24 @@ class Introduction {
     }
 
     private void welcomeMessage() {
-        String introBanner = "images/intro_banner.txt";
-        try {
-            Files.readAllLines(Path.of(introBanner)).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pause(5_000); // 5 secs
+        System.out.println(introBanner);
+        pause(5_000);
     }
 
     private void showRules() {
         clear();
-        String rules = "images/rules.txt";
+        System.out.println(rules);
+        prompter.prompt("\n\t\t\t\t Enter [Y]es to Continue: ", "Y|y",
+                "\n\t\t\t\t This is not a valid option!\n");
+    }
+
+    static {
         try {
-            Files.readAllLines(Path.of(rules)).forEach(System.out::println);
+            rules = Files.readString(Path.of("images/rules.txt"));
+            rulesOption = Files.readString(Path.of("images/rules_option.txt"));
+            introBanner = Files.readString(Path.of("images/intro_banner.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        prompter.prompt("\n\t\t\t\t Enter [Y]es to Continue: ", "Y|y",
-                "\n\t\t\t\t This is not a valid option!\n");
     }
 }
