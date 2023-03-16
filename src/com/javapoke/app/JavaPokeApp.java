@@ -86,7 +86,6 @@ public class JavaPokeApp implements SplashApp {
             }
         }
         player.setPokemon(trainerPokemon);
-        System.out.println(player);
     }
 
     public Map<Integer, Pokemon> loadPokemonMap()
@@ -98,12 +97,13 @@ public class JavaPokeApp implements SplashApp {
 
             for (String line : lines) {
                 String[] tokens = line.split(",");
-                if (tokens.length != 5) {
+                if (tokens.length != 6) {
                     throw new RuntimeException("Invalid Line in CSV file " + line);
                 }
                 pokemonMap.put(Integer.valueOf(tokens[0]),
                         new Pokemon(tokens[1], Integer.parseInt(tokens[2]),
-                                Integer.parseInt(tokens[3]), tokens[4]));
+                                Integer.parseInt(tokens[3]), tokens[4],
+                        Files.readString(Path.of(tokens[5]))));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -145,6 +145,5 @@ public class JavaPokeApp implements SplashApp {
                 player = new Trainer(characterName);
                 break;
         }
-        System.out.println(player);
     }
 }

@@ -14,6 +14,8 @@ class Main {
         JavaPokeApp app = new JavaPokeApp();
 //        Pokemon pokemon = new Pokemon("Blastoise",62,169,"Bite"
 //                , Files.readString(Path.of("images/pokemon/Alakazam.txt")));
+//        EliteTrainer lorelei = new EliteTrainer().loadLorelei();
+//        System.out.println(lorelei);
 //        System.out.println(pokemon.getArt());
 
 //        EliteTrainer lance = new EliteTrainer().loadLance();

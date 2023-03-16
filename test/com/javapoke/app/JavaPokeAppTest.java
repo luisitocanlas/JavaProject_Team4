@@ -22,7 +22,7 @@ public class JavaPokeAppTest {
     // chooseTrainer() Tests
     @Test
     public void chooseTrainer_shouldReturnBrock_whenOption3IsSelected()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -43,17 +43,17 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player = new Trainer(characterName);
                 break;
         }
-        assertEquals("Brock",player.getName());
+        assertEquals("Brock", player.getName());
     }
 
     @Test
     public void chooseTrainer_shouldReturnMisty_whenOption2IsSelected()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -74,17 +74,17 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player.setName(characterName);
                 break;
         }
-        assertEquals("Misty",player.getName());
+        assertEquals("Misty", player.getName());
     }
 
     @Test
     public void chooseTrainer_shouldReturnAsh_whenOption1IsSelected()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -105,17 +105,17 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player.setName(characterName);
                 break;
         }
-        assertEquals("Ash",player.getName());
+        assertEquals("Ash", player.getName());
     }
 
     @Test
     public void chooseTrainer_shouldReturnInputName_whenOption4IsSelected()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -136,17 +136,17 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player.setName(characterName);
                 break;
         }
-        assertEquals("Jorge",player.getName());
+        assertEquals("Jorge", player.getName());
     }
 
     @Test
     public void chooseTrainer_shouldNotAccept1stInputAndOnlyAccept2ndInput_when1stInputIsInvalid()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -168,20 +168,20 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player.setName(characterName);
                 break;
         }
         String declinedInput = "";
-        assertEquals("a",player.getName());         // 1 character lower limit
-        assertNotEquals(declinedInput,player.getName());
+        assertEquals("a", player.getName());         // 1 character lower limit
+        assertNotEquals(declinedInput, player.getName());
         assertTrue(declinedInput.isBlank());                // 0 character beyond lower limit
     }
 
     @Test
     public void chooseTrainer_shouldAcceptTheValid2ndInput_when1stInputHasMoreThan12CharactersLong()
-    throws FileNotFoundException {
+            throws FileNotFoundException {
         int maxLength = 12;
         List<Trainer> trainers = new ArrayList<>(List.of(new Trainer("Ash")
                 , new Trainer("Misty"), new Trainer("Brock")));
@@ -203,23 +203,23 @@ public class JavaPokeAppTest {
             case 4:
                 blankLines(1);
                 String characterName = prompter.prompt("\t\t What is the name of your Trainer: "
-                        , "^.{1,"+ maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
+                        , "^.{1," + maxLength + "}$", "\n\t\t Name must not exceed " + maxLength
                                 + " characters!\n");
                 player.setName(characterName);
                 break;
         }
         String acceptedInput = "abcdefghijkl";                  // 12 Char Upper Limit
         String declinedInput = "abcdefghijklm";                 // 13 Char to test edge case
-        assertNotEquals(declinedInput,player.getName());
-        assertEquals(acceptedInput,player.getName());
-        assertEquals(acceptedInput.length(),12);
-        assertEquals(declinedInput.length(),13);
+        assertNotEquals(declinedInput, player.getName());
+        assertEquals(acceptedInput, player.getName());
+        assertEquals(acceptedInput.length(), 12);
+        assertEquals(declinedInput.length(), 13);
     }
 
     // choosePokemon() Tests
     @Test
     public void choosePokemon_shouldAcceptAllInputOfPokemon_whenNotSelectingDuplicatesAndGivenValidInputs()
-    throws FileNotFoundException {
+    throws IOException {
         JavaPokeApp app = new JavaPokeApp();
         Map<Integer, Pokemon> pokemonMap = app.loadPokemonMap();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();      // changed to map instead of list
@@ -239,19 +239,23 @@ public class JavaPokeAppTest {
             }
         }
         player.setPokemon(trainerPokemon);
-        assertEquals(new Pokemon("Eevee",60,145).toString()
-                ,player.getPokemon().get(1).toString());
-        assertEquals(new Pokemon("Blastoise",62,169).toString()
-                ,player.getPokemon().get(2).toString());
-        assertEquals(new Pokemon("Machamp",61,180).toString()
-                ,player.getPokemon().get(3).toString());
-        assertEquals(new Pokemon("Gengar",62,165).toString()
-                ,player.getPokemon().get(4).toString());
+        assertEquals(new Pokemon("Eevee", 60, 145, "Bite",
+                        Files.readString(Path.of("images/players_pokemon/Eevee_dark.txt"))).toString()
+                , player.getPokemon().get(1).toString());
+        assertEquals(new Pokemon("Blastoise", 62, 169,"Hydro Pump",
+                Files.readString(Path.of("images/players_pokemon/Blastoise_dark.txt"))).toString()
+                , player.getPokemon().get(2).toString());
+        assertEquals(new Pokemon("Machamp", 61, 180, "Seismic Toss",
+                        Files.readString(Path.of("images/players_pokemon/Machamp_dark.txt"))).toString()
+                , player.getPokemon().get(3).toString());
+        assertEquals(new Pokemon("Gengar", 62, 165,"Night Shade",
+                Files.readString(Path.of("images/players_pokemon/Gengar_dark.txt"))).toString()
+                , player.getPokemon().get(4).toString());
     }
 
     @Test
     public void choosePokemon_shouldRejectDuplicatesAndAcceptValidInputs_whenGivenDuplicatesInputsAndInvalidInput()
-    throws FileNotFoundException {
+    throws IOException {
         JavaPokeApp app = new JavaPokeApp();
         Map<Integer, Pokemon> pokemonMap = app.loadPokemonMap();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();      // changed to map instead of list
@@ -271,19 +275,23 @@ public class JavaPokeAppTest {
             }
         }
         player.setPokemon(trainerPokemon);
-        assertEquals(new Pokemon("Eevee",60,145).toString()
-                ,player.getPokemon().get(1).toString());
-        assertEquals(new Pokemon("Blastoise",62,169).toString()
-                ,player.getPokemon().get(2).toString());
-        assertEquals(new Pokemon("Machamp",61,180).toString()
-                ,player.getPokemon().get(3).toString());
-        assertEquals(new Pokemon("Gengar",62,165).toString()
-                ,player.getPokemon().get(4).toString());
+        assertEquals(new Pokemon("Eevee", 60, 145, "Bite",
+                        Files.readString(Path.of("images/players_pokemon/Eevee_dark.txt"))).toString()
+                , player.getPokemon().get(1).toString());
+        assertEquals(new Pokemon("Blastoise", 62, 169,"Hydro Pump",
+                        Files.readString(Path.of("images/players_pokemon/Blastoise_dark.txt"))).toString()
+                , player.getPokemon().get(2).toString());
+        assertEquals(new Pokemon("Machamp", 61, 180, "Seismic Toss",
+                        Files.readString(Path.of("images/players_pokemon/Machamp_dark.txt"))).toString()
+                , player.getPokemon().get(3).toString());
+        assertEquals(new Pokemon("Gengar", 62, 165,"Night Shade",
+                        Files.readString(Path.of("images/players_pokemon/Gengar_dark.txt"))).toString()
+                , player.getPokemon().get(4).toString());
     }
 
     @Test
     public void choosePokemon_shouldRejectInvalidInputsAndAcceptNonDuplicates_whenGivenDuplicatesAndGivenValidInputs()
-    throws FileNotFoundException {
+    throws IOException {
         JavaPokeApp app = new JavaPokeApp();
         Map<Integer, Pokemon> trainerPokemon = new HashMap<>();      // changed to map instead of list
         int maxNumOfPokemon = 4;
@@ -302,13 +310,17 @@ public class JavaPokeAppTest {
             }
         }
         player.setPokemon(trainerPokemon);
-        assertEquals(new Pokemon("Eevee",60,145).toString()
-                ,player.getPokemon().get(1).toString());
-        assertEquals(new Pokemon("Blastoise",62,169).toString()
-                ,player.getPokemon().get(2).toString());
-        assertEquals(new Pokemon("Machamp",61,180).toString()
-                ,player.getPokemon().get(3).toString());
-        assertEquals(new Pokemon("Gengar",62,165).toString()
-                ,player.getPokemon().get(4).toString());
+        assertEquals(new Pokemon("Eevee", 60, 145, "Bite",
+                        Files.readString(Path.of("images/players_pokemon/Eevee_dark.txt"))).toString()
+                , player.getPokemon().get(1).toString());
+        assertEquals(new Pokemon("Blastoise", 62, 169,"Hydro Pump",
+                        Files.readString(Path.of("images/players_pokemon/Blastoise_dark.txt"))).toString()
+                , player.getPokemon().get(2).toString());
+        assertEquals(new Pokemon("Machamp", 61, 180, "Seismic Toss",
+                        Files.readString(Path.of("images/players_pokemon/Machamp_dark.txt"))).toString()
+                , player.getPokemon().get(3).toString());
+        assertEquals(new Pokemon("Gengar", 62, 165,"Night Shade",
+                        Files.readString(Path.of("images/players_pokemon/Gengar_dark.txt"))).toString()
+                , player.getPokemon().get(4).toString());
     }
 }
