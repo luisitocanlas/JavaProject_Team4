@@ -6,7 +6,7 @@ class Dialogue {
 
     void loreleiDialogue() {
         blankLines(1);
-        System.out.println("Welcome to Java Poké!\n");
+        System.out.println("Welcome to Java Poke!\n");
         pause(2_000);
         System.out.println("I am Lorelei of the Elite Four!\n");
         pause(2_000);
