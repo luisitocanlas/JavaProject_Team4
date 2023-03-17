@@ -2,6 +2,12 @@ package com.javapoke;
 
 import java.util.Map;
 
+/**
+ * This class is for creation of a Trainer and loading their respective dialogue
+ *
+ * @author Jorge Aponte and Lui Canlas
+ * @version 1.0
+ */
 public class Trainer {
     //fields
     private String name;
@@ -21,6 +27,12 @@ public class Trainer {
         this.pokemon = pokemon;
     }
 
+    /**
+     * This method loads the dialogue for the specified character name.
+     *
+     * @param name the name of the character whose dialogue to load.
+     *             Must be one of: "Agatha", "Bruno", "Lorelei", "Lance", "THE Joshua BLOCH", "Surprise".
+     */
     public void loadDialogue(String name) {
         switch (name) {
             case "Agatha":

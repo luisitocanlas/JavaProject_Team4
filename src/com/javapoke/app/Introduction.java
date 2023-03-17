@@ -20,11 +20,11 @@ class Introduction {
         this.prompter = prompter;
     }
 
-    /*
-     * This method will call to welcome the user to the game and prompt the user if they would like
-     * to read the rules or not before starting the game. If the player inputs "Y/y" they
-     * will be shown the rules(). If the player inputs "N/n" the method will be complete
-     * and continue in com.javapoke.app.JavaPokeApp beginChallenge()
+    /**
+     * This method will showcase a welcome banner and afterwards will prompt
+     * the user if they would like to be showcased the rules of the program.
+     * If the user decides to be showcased the rules they will be given another
+     * prompt to continue forward in the program.
      */
     public void startUp() {
         welcomeMessage();

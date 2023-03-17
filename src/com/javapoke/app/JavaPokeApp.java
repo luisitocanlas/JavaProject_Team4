@@ -11,6 +11,12 @@ import java.util.*;
 
 import static com.apps.util.Console.*;
 
+/**
+ * This class is the Controller of our Program
+ *
+ * @author Jorge Aponte and Lui Canlas
+ * @version 1.0
+ */
 public class JavaPokeApp implements SplashApp {
     private static final int maxLengthCharactersForName = 12;
     private static final int maxNumOfPokemon = 4;
@@ -25,6 +31,9 @@ public class JavaPokeApp implements SplashApp {
     private final PokeBattle pokeBattle = new PokeBattle(prompter);
     private Trainer player;
 
+    /**
+     * This method starts the program.
+     */
     @Override
     public void start() {
         beginChallenge();
