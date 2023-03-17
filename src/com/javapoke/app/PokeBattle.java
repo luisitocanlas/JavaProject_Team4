@@ -15,7 +15,7 @@ import static com.apps.util.Console.*;
 import static com.javapoke.Potion.*;
 
 
-public class PokeBattle {
+class PokeBattle {
 
     private final Prompter prompter;
     private final Map<String, Integer> maxHpContainer = new TreeMap<>();

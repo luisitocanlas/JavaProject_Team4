@@ -6,7 +6,7 @@ public class Trainer {
     //fields
     private String name;
     private Map<Integer, Pokemon> pokemon;
-    Dialogue dialogue = new Dialogue();
+    private final Dialogue dialogue = new Dialogue();
 
     //constructors
     public Trainer() {
