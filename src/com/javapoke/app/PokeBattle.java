@@ -196,13 +196,11 @@ class PokeBattle {
         blankLines(1);
         // if in a battle [inBattle = true]
         if (!inBattle) {
-            // will output the list of pokemon available, their LVL and HP, and user will select from the list
             pokeSwitch();
             // computer attacks your pokemon
         }
         // else if you are in between fights [inBattle=false]
         else {
-            // will output the list of pokemon available, their LVL and HP, and user will select from the list
             pokeSwitch();
             // switch [inBattle=true]
             inBattle = true;
