@@ -2,6 +2,11 @@ package com.javapoke;
 
 import java.util.Random;
 
+/**
+ * This class is used to create Pokemon for our program.
+ * @author Jorge Aponte and Lui Canlas
+ * @version 1.0
+ */
 public class Pokemon {
     // fields
     private final String name;
@@ -29,6 +34,12 @@ public class Pokemon {
         this.art = art;
     }
 
+    /**
+     * This method is used to generate an attack damage value that a given Pokémon intakes
+     * This method will also update the other Pokemon's hp.
+     * @param other The Pokémon in which is receiving the damage
+     * @return The total amount of damage dealt to the Pokémon
+     */
     // business methods
     public int attack(Pokemon other) {
         int damage = Attack.getDamage();
