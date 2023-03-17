@@ -40,11 +40,11 @@ public class JavaPokeApp implements SplashApp {
     }
 
     private void beginChallenge() {
-        intro.startUp();    // Completed
-        chooseTrainer();    // Completed
-        choosePokemon();    // Completed
-        startGame(player);  // Completed
-        gameOver();         // Completed
+        intro.startUp();
+        chooseTrainer();
+        choosePokemon();
+        startGame(player);
+        gameOver();
     }
 
     private void gameOver() {
