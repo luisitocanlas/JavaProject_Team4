@@ -32,8 +32,8 @@ class PokeBattle {
     private static String congratulationsBanner;
     private static String continuePrompt;
 
-    private int potion = 25;        // adjust for difficulty
-    private int superPotion = 15;   // adjust for difficulty
+    private int potion = 20;        // adjust for difficulty
+    private int superPotion = 10;   // adjust for difficulty
     private int maxHP;
     private boolean inBattle = false;
     private Pokemon activePokemon;
